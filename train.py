@@ -1,4 +1,5 @@
 import os
+
 os.system(f"caffeinate -is -w {os.getpid()} &")
 
 from architecture import Simple_VAE
@@ -10,14 +11,8 @@ import torchvision
 from trainingmanager import TrainingManager
 
 
-
-
-
-#TODO: setup experiment dir
+# TODO: setup experiment dir
 EXPERIMENT_DIRECTORY = "runs/vae_test1"
-
-
-
 
 
 device = "mps" if torch.backends.mps.is_available() else "cpu"
@@ -30,21 +25,23 @@ testloader = get_dataloader(get_test_dataset())
 net = Simple_VAE()
 net.to(device)
 
-#TODO: configure
+# TODO: configure
 trainer = TrainingManager(
     net=net,
     dir=EXPERIMENT_DIRECTORY,
     dataloader=dataloader,
     device=device,
     trainstep_checkin_interval=100,
-    epochs=100
+    epochs=100,
 )
 
 
-
-
 for batch, attn_mask in dataloader:
-    init_logger(net, (batch.to(device), attn_mask.to(device)), dir=os.path.join(EXPERIMENT_DIRECTORY, "tensorboard"))
+    init_logger(
+        net,
+        (batch.to(device), attn_mask.to(device)),
+        dir=os.path.join(EXPERIMENT_DIRECTORY, "tensorboard"),
+    )
     break
 
 trainer.train()

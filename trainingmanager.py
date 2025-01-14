@@ -10,22 +10,23 @@ device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 from collections import defaultdict
 
+
 class ValueTracker:
     def __init__(self):
         self.data = {}
-    
+
     def add(self, label, value):
         if label not in self.data:
             self.data[label] = []
         self.data[label].append(value)
-    
+
     def average(self, label):
         values = self.data[label]
         if values:
             return sum(values) / len(values)
         else:
             return 0.0
-    
+
     def reset(self, label=None):
         if label is not None:
             if label in self.data:
@@ -33,18 +34,13 @@ class ValueTracker:
         else:
             self.data = {}
 
-    
     def get_values(self, label):
         return self.data[label]
-    
 
     def summary(self):
         for label in self.data:
             avg = self.average(label)
             print(f"{label} - Average: {avg:.4f}")
-
-
-
 
 
 class TrainingManager:
@@ -55,17 +51,23 @@ class TrainingManager:
         epochs=10,
         device="cpu",
         trainstep_checkin_interval=100,
-        dir="runs"
+        dir="runs",
     ):
         self.net = net.to(device)
         self.dataloader = dataloader
-        self.optimizer = torch.optim.Adam(self.net.parameters(), lr=1e-3) # default choice
+        self.optimizer = torch.optim.Adam(
+            self.net.parameters(), lr=1e-3
+        )  # default choice
         self.epochs = epochs
         self.device = device
         self.trainstep_checkin_interval = trainstep_checkin_interval
         self.tracker = ValueTracker()
         self.dir = dir
-        init_logger(self.net, torch.rand(1, 1, 28, 28).to(device), dir=os.path.join(dir, "tensorboard"))
+        init_logger(
+            self.net,
+            torch.rand(1, 1, 28, 28).to(device),
+            dir=os.path.join(dir, "tensorboard"),
+        )
 
     def hasnan(self):
         for _, param in self.net.named_parameters():
@@ -80,18 +82,18 @@ class TrainingManager:
     def trainstep(self, data):
         x, _ = data  # VAE only needs images, not labels
         x = x.to(self.device)
-        
+
         self.optimizer.zero_grad()
-        
+
         # Forward pass
         recon_x, mu, logvar = self.net(x)
-        
+
         # Calculate loss
         loss = self.net.loss_function(recon_x, x, mu, logvar)
-        
+
         loss.backward()
         self.optimizer.step()
-        
+
         self.tracker.add("Loss/trainstep", loss.item())
         self.tracker.add("Loss/epoch", loss.item())
 
@@ -99,11 +101,11 @@ class TrainingManager:
     def valstep(self, data):
         x, _ = data
         x = x.to(self.device)
-        
+
         recon_x, mu, logvar = self.net(x)
-        
+
         loss = self.net.loss_function(recon_x, x, mu, logvar)
-        
+
         self.tracker.add("Loss/valstep", loss.item())
         self.tracker.add("Loss/val/epoch", loss.item())
 
@@ -126,10 +128,10 @@ class TrainingManager:
         # fancy image logging
         with torch.no_grad():
             test_batch, _ = next(iter(self.dataloader))
-            test_batch = test_batch[:8].to(self.device)# first 8
-            
+            test_batch = test_batch[:8].to(self.device)  # first 8
+
             recon_batch, _, _ = self.net(test_batch)
-            
+
             comparison = torch.cat([test_batch, recon_batch])
             log_img("reconstructions", comparison, epoch)
 

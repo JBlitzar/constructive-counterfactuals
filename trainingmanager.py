@@ -50,65 +50,94 @@ class ValueTracker:
 class TrainingManager:
     def __init__(
         self,
-        net: nn.Module,
-        dir: str,
+        model,
         dataloader,
-        device=device,
+        optimizer,
+        epochs=10,
+        device="cpu",
         trainstep_checkin_interval=100,
-        epochs=100,
-        val_dataloader=None,
     ):
-
-        #TODO: configure hyperparams
-
-        learning_rate = 0.001
-
-        self.trainstep_checkin_interval = trainstep_checkin_interval
-        self.epochs = epochs
-
+        self.model = model.to(device)
         self.dataloader = dataloader
-        self.val_dataloader = val_dataloader
-
-        self.net = net
-        self.net.to(device)
+        self.optimizer = optimizer
+        self.epochs = epochs
         self.device = device
-
-        self.dir = dir
-
-        self.criterion = torch.nn.CrossEntropyLoss()
-        self.optimizer = torch.optim.Adam(self.net.parameters(), lr=learning_rate)
-
+        self.trainstep_checkin_interval = trainstep_checkin_interval
         self.tracker = ValueTracker()
-
-        self.resume_amt = self.get_resume()
-        if self.resume_amt != 0:
-            self.resume()
-        else:
-            if os.path.exists(self.dir) and any(
-                os.path.isfile(os.path.join(self.dir, item))
-                for item in os.listdir(self.dir)
-            ):
-                raise ValueError(f"The directory '{self.dir}' contains files!")
-
-            os.makedirs(self.dir, exist_ok=True)
-            os.makedirs(os.path.join(self.dir, "ckpt"), exist_ok=True)
+        init_logger()
 
     def hasnan(self):
-        for _, param in self.net.named_parameters():
+        for _, param in self.model.named_parameters():
             if torch.isnan(param).any():
                 return True
-        for _, param in self.net.named_parameters():
+        for _, param in self.model.named_parameters():
             if param.grad is not None and torch.isnan(param.grad).any():
                 return True
 
         return False
 
+    def trainstep(self, data):
+        x, _ = data  # VAE only needs images, not labels
+        x = x.to(self.device)
+        
+        self.optimizer.zero_grad()
+        
+        # Forward pass
+        recon_x, mu, logvar = self.model(x)
+        
+        # Calculate loss
+        loss = self.model.loss_function(recon_x, x, mu, logvar)
+        
+        loss.backward()
+        self.optimizer.step()
+        
+        self.tracker.add("Loss/trainstep", loss.item())
+        self.tracker.add("Loss/epoch", loss.item())
+
+    @torch.no_grad()
+    def valstep(self, data):
+        x, _ = data
+        x = x.to(self.device)
+        
+        recon_x, mu, logvar = self.model(x)
+        
+        loss = self.model.loss_function(recon_x, x, mu, logvar)
+        
+        self.tracker.add("Loss/valstep", loss.item())
+        self.tracker.add("Loss/val/epoch", loss.item())
+
+    def on_trainloop_checkin(self, epoch, step, total_steps):
+        avg_loss = self.tracker.average("Loss/trainstep")
+        log_data({"Loss/train": avg_loss}, step + epoch * total_steps)
+        self.tracker.reset("Loss/trainstep")
+
+    def on_epoch_checkin(self, epoch):
+        # Log training metrics
+        train_loss = self.tracker.average("Loss/epoch")
+        log_data({"Loss/epoch": train_loss}, epoch)
+        self.tracker.reset("Loss/epoch")
+
+        # Log validation metrics
+        val_loss = self.tracker.average("Loss/val/epoch")
+        log_data({"Loss/val/epoch": val_loss}, epoch)
+        self.tracker.reset("Loss/val/epoch")
+
+        # fancy image logging
+        with torch.no_grad():
+            test_batch, _ = next(iter(self.dataloader))
+            test_batch = test_batch[:8].to(self.device)# first 8
+            
+            recon_batch, _, _ = self.model(test_batch)
+            
+            comparison = torch.cat([test_batch, recon_batch])
+            log_img("reconstructions", comparison, epoch)
+
     def _save(self, name="latest.pt"):
         with open(os.path.join(self.dir, "ckpt", name), "wb+") as f:
-            torch.save(self.net.state_dict(), f)
+            torch.save(self.model.state_dict(), f)
 
     def _load(self, name="latest.pt"):
-        self.net.load_state_dict(
+        self.model.load_state_dict(
             torch.load(os.path.join(self.dir, "ckpt", name), weights_only=True)
         )
 
@@ -147,75 +176,6 @@ class TrainingManager:
             self.write_best_val_loss(best_val_loss)
 
         # self._save(f"{prefix}_{step}.pt")
-
-    def on_trainloop_checkin(self, epoch, step, dataloader_len):
-        if self.hasnan():
-            # revert
-            self.resume()
-
-        self._save("latest.pt")  # Just update latest checkpoint
-
-        log_data(
-            {"Loss/Trainstep": self.tracker.average("Loss/trainstep")},
-            epoch * dataloader_len + step,
-        )
-
-        self.tracker.reset("Loss/trainstep")
-
-    def on_epoch_checkin(self, epoch):
-        if self.hasnan():
-            # revert
-            self.resume()
-
-        val_loss = float("inf")
-        try:
-            val_loss = self.tracker.average("Loss/val/epoch")
-        except KeyError:
-            pass
-
-        self.save(val_loss if val_loss < float("inf") else self.tracker.average("Loss/epoch"))
-
-        log_data(
-            {
-                "Loss/Epoch": self.tracker.average("Loss/epoch"),
-                "Loss/Val/Epoch": val_loss,
-            },
-            epoch,
-        )
-
-        self.tracker.reset("Loss/epoch")
-        self.tracker.reset("Loss/val/epoch")
-
-        self.write_resume(epoch)
-
-    def trainstep(self, data):
-
-        data = tuple(d.to(self.device) for d in data)
-
-        self.optimizer.zero_grad()
-
-        # Different for every model
-        #TODO: implement
-
-        loss.backward()
-
-        self.optimizer.step()
-
-        self.tracker.add("Loss/trainstep", loss.item())
-        self.tracker.add("Loss/epoch", loss.item())
-
-    @torch.no_grad()  # decorator yay
-    def valstep(self, data):
-
-        data = tuple(d.to(self.device) for d in data)
-
-        self.optimizer.zero_grad()
-
-        # Different for every model
-       #TODO: implement
-
-        # self.tracker.add("Loss/valstep", loss.item())
-        self.tracker.add("Loss/val/epoch", loss.item())
 
     def epoch(self, epoch: int, dataloader, val_loader=None):
         for step, data in enumerate(tqdm(dataloader, leave=False, dynamic_ncols=True)):

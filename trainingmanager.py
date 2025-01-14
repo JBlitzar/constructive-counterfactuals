@@ -52,25 +52,26 @@ class TrainingManager:
         self,
         net,
         dataloader,
-        optimizer,
         epochs=10,
         device="cpu",
         trainstep_checkin_interval=100,
+        dir="runs"
     ):
         self.net = net.to(device)
         self.dataloader = dataloader
-        self.optimizer = optimizer
+        self.optimizer = torch.optim.Adam(self.net.parameters(), lr=1e-3) # default choice
         self.epochs = epochs
         self.device = device
         self.trainstep_checkin_interval = trainstep_checkin_interval
         self.tracker = ValueTracker()
-        init_logger()
+        self.dir = dir
+        init_logger(self.net, torch.rand(1, 1, 28, 28).to(device), dir=os.path.join(dir, "tensorboard"))
 
     def hasnan(self):
-        for _, param in self.model.named_parameters():
+        for _, param in self.net.named_parameters():
             if torch.isnan(param).any():
                 return True
-        for _, param in self.model.named_parameters():
+        for _, param in self.net.named_parameters():
             if param.grad is not None and torch.isnan(param.grad).any():
                 return True
 
@@ -83,10 +84,10 @@ class TrainingManager:
         self.optimizer.zero_grad()
         
         # Forward pass
-        recon_x, mu, logvar = self.model(x)
+        recon_x, mu, logvar = self.net(x)
         
         # Calculate loss
-        loss = self.model.loss_function(recon_x, x, mu, logvar)
+        loss = self.net.loss_function(recon_x, x, mu, logvar)
         
         loss.backward()
         self.optimizer.step()
@@ -99,9 +100,9 @@ class TrainingManager:
         x, _ = data
         x = x.to(self.device)
         
-        recon_x, mu, logvar = self.model(x)
+        recon_x, mu, logvar = self.net(x)
         
-        loss = self.model.loss_function(recon_x, x, mu, logvar)
+        loss = self.net.loss_function(recon_x, x, mu, logvar)
         
         self.tracker.add("Loss/valstep", loss.item())
         self.tracker.add("Loss/val/epoch", loss.item())
@@ -127,17 +128,17 @@ class TrainingManager:
             test_batch, _ = next(iter(self.dataloader))
             test_batch = test_batch[:8].to(self.device)# first 8
             
-            recon_batch, _, _ = self.model(test_batch)
+            recon_batch, _, _ = self.net(test_batch)
             
             comparison = torch.cat([test_batch, recon_batch])
             log_img("reconstructions", comparison, epoch)
 
     def _save(self, name="latest.pt"):
         with open(os.path.join(self.dir, "ckpt", name), "wb+") as f:
-            torch.save(self.model.state_dict(), f)
+            torch.save(self.net.state_dict(), f)
 
     def _load(self, name="latest.pt"):
-        self.model.load_state_dict(
+        self.net.load_state_dict(
             torch.load(os.path.join(self.dir, "ckpt", name), weights_only=True)
         )
 

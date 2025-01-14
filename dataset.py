@@ -84,7 +84,7 @@ class TinyImageNetDataset(Dataset):
 #TODO: fix up dataloader
 def get_train_dataset():
     dataset = dset.MNIST(
-        root_dir=os.path.expanduser("~/torch_datasets/mnist"),
+        root=os.path.expanduser("~/torch_datasets/mnist"),
         train=True,
         transform=transforms
     )
@@ -92,7 +92,7 @@ def get_train_dataset():
 
 def get_test_dataset():
     dataset = dset.MNIST(
-        root_dir=os.path.expanduser("~/torch_datasets/mnist"),
+        root=os.path.expanduser("~/torch_datasets/mnist"),
         train=False,
         transform=transforms
     )
@@ -101,7 +101,7 @@ def get_test_dataset():
 def get_val_dataset():
 
     dataset = dset.MNIST(
-        root_dir=os.path.expanduser("~/torch_datasets/mnist"),
+        root=os.path.expanduser("~/torch_datasets/mnist"),
         transform=transforms,
         train=False
     )

@@ -50,14 +50,14 @@ class ValueTracker:
 class TrainingManager:
     def __init__(
         self,
-        model,
+        net,
         dataloader,
         optimizer,
         epochs=10,
         device="cpu",
         trainstep_checkin_interval=100,
     ):
-        self.model = model.to(device)
+        self.net = net.to(device)
         self.dataloader = dataloader
         self.optimizer = optimizer
         self.epochs = epochs

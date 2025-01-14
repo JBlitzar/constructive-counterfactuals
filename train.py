@@ -14,7 +14,7 @@ from trainingmanager import TrainingManager
 
 
 #TODO: setup experiment dir
-EXPERIMENT_DIRECTORY = "runs/test"
+EXPERIMENT_DIRECTORY = "runs/vae_test1"
 
 
 
@@ -27,7 +27,7 @@ dataloader = get_dataloader(get_train_dataset())
 testloader = get_dataloader(get_test_dataset())
 
 
-net = Transformer()
+net = Simple_VAE()
 net.to(device)
 
 #TODO: configure

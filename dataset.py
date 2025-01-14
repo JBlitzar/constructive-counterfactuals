@@ -5,8 +5,8 @@ import torch
 import os
 
 transform_pipeline = transforms.Compose([
-    transforms.PILToTensor(),
-    transforms.ConvertImageDtype(torch.float32),
+    transforms.ToTensor(),
+    # transforms.ConvertImageDtype(torch.float32),
     transforms.Normalize((0.1307,), (0.3081,))
 ])
 

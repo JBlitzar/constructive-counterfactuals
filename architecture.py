@@ -102,7 +102,7 @@ class Simple_VAE(nn.Module):
 
 
 class Linear_VAE(nn.Module):
-    def __init__(self, latent_dim=20):
+    def __init__(self, latent_dim=5): # previously 20
         super().__init__()
 
         self.encoder = nn.Sequential(

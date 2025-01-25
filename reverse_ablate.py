@@ -65,7 +65,7 @@ def reverse_ablate(image, net,thresh=500,n = 10,use_threshold = True):
         threshold = thresh
         for param in net.parameters():
             if param.grad is not None:
-                param.data[torch.abs(param.grad) >= threshold] = -torch.sign(param.grad[torch.abs(param.grad) >= threshold]) * 0.1
+                param.data[torch.abs(param.grad) >= threshold] -= torch.sign(param.grad[torch.abs(param.grad) >= threshold]) * 0.1
 
 def before_after(item, net):
     before_loss, before_recon = loss_recon_package(item, net)

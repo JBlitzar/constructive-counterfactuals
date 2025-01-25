@@ -3,8 +3,8 @@ import torch
 from logger import log_data, init_logger, log_img
 import torch.nn as nn
 from tqdm import tqdm, trange
-
-
+from torch.profiler import profile, record_function, ProfilerActivity
+import gc
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 
@@ -46,32 +46,56 @@ class ValueTracker:
 class TrainingManager:
     def __init__(
         self,
-        net,
+        net: nn.Module,
+        dir: str,
         dataloader,
-        epochs=10,
-        device="cpu",
+        device=device,
         trainstep_checkin_interval=100,
-        dir="runs",
+        epochs=100,
+        val_dataloader=None,
     ):
-        self.net = net.to(device)
-        self.dataloader = dataloader
-        self.optimizer = torch.optim.Adam(
-            self.net.parameters(), lr=1e-3
-        )  # default choice
-        self.epochs = epochs
-        self.device = device
+
+        learning_rate = 0.001
+
+        self.clip = 1.0
+
         self.trainstep_checkin_interval = trainstep_checkin_interval
-        self.tracker = ValueTracker()
+        self.epochs = epochs
+
+        self.dataloader = dataloader
+        self.val_dataloader = val_dataloader
+
+        self.net = net
+        self.net.to(device)
+        self.device = device
+
         self.dir = dir
 
-        self.val_dataloader = None
-        init_logger(
-            self.net,
-            torch.rand(1, 1, 28, 28).to(device),
-            dir=os.path.join(dir, "tensorboard"),
+        self.criterion = torch.nn.CrossEntropyLoss(label_smoothing=0.1)
+        self.optimizer = torch.optim.Adam(self.net.parameters(), lr=learning_rate)
+
+        # No clue what this does. Maybe its good
+        # initialized and never used.
+        self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer=self.optimizer, factor=0.9, patience=10
         )
 
+        self.tracker = ValueTracker()
+
         self.resume_amt = self.get_resume()
+        if self.resume_amt != 0:
+            self.resume()
+        else:
+            if os.path.exists(self.dir) and any(
+                os.path.isfile(os.path.join(self.dir, item))
+                for item in os.listdir(self.dir)
+            ):
+                raise ValueError(f"The directory '{self.dir}' contains files!")
+
+            os.makedirs(self.dir, exist_ok=True)
+            os.makedirs(os.path.join(self.dir, "ckpt"), exist_ok=True)
+
+        print(f"{self.get_param_count()} parameters.")
 
     def hasnan(self):
         for _, param in self.net.named_parameters():
@@ -82,64 +106,6 @@ class TrainingManager:
                 return True
 
         return False
-
-    def trainstep(self, data):
-        x, _ = data  # VAE only needs images, not labels
-        x = x.to(self.device)
-
-        self.optimizer.zero_grad()
-
-        # Forward pass
-        recon_x, mu, logvar = self.net(x)
-
-        # Calculate loss
-        loss = self.net.loss_function(recon_x, x, mu, logvar)
-
-        loss.backward()
-        self.optimizer.step()
-
-        self.tracker.add("Loss/trainstep", loss.item())
-        self.tracker.add("Loss/epoch", loss.item())
-
-
-
-    @torch.no_grad()
-    def valstep(self, data):
-        x, _ = data
-        x = x.to(self.device)
-
-        recon_x, mu, logvar = self.net(x)
-
-        loss = self.net.loss_function(recon_x, x, mu, logvar)
-
-        self.tracker.add("Loss/valstep", loss.item())
-        self.tracker.add("Loss/val/epoch", loss.item())
-
-    def on_trainloop_checkin(self, epoch, step, total_steps):
-        avg_loss = self.tracker.average("Loss/trainstep")
-        log_data({"Loss/train": avg_loss}, step + epoch * total_steps)
-        self.tracker.reset("Loss/trainstep")
-
-    def on_epoch_checkin(self, epoch):
-        # Log training metrics
-        train_loss = self.tracker.average("Loss/epoch")
-        log_data({"Loss/epoch": train_loss}, epoch)
-        self.tracker.reset("Loss/epoch")
-
-        # Log validation metrics
-        val_loss = self.tracker.average("Loss/val/epoch")
-        log_data({"Loss/val/epoch": val_loss}, epoch)
-        self.tracker.reset("Loss/val/epoch")
-
-        # fancy image logging
-        with torch.no_grad():
-            test_batch, _ = next(iter(self.dataloader))
-            test_batch = test_batch[:8].to(self.device)  # first 8
-
-            recon_batch, _, _ = self.net(test_batch)
-
-            comparison = torch.cat([test_batch, recon_batch])
-            log_img("reconstructions", comparison, epoch)
 
     def _save(self, name="latest.pt"):
         with open(os.path.join(self.dir, "ckpt", name), "wb+") as f:
@@ -186,9 +152,113 @@ class TrainingManager:
 
         # self._save(f"{prefix}_{step}.pt")
 
-    def epoch(self, epoch: int, dataloader, val_loader=None):
-        for step, data in enumerate(tqdm(dataloader, leave=False, dynamic_ncols=True)):
+    def on_trainloop_checkin(self, epoch, step, dataloader_len):
+        if self.hasnan():
+            # revert
+            print("RESUMIGN")
+            self.resume()
+
+        self._save("latest.pt")  # Just update latest checkpoint
+
+        log_data(
+            {"Loss/Trainstep": self.tracker.average("Loss/trainstep")},
+            epoch * dataloader_len + step,
+        )
+        #print(f"Look at me! I'm logging accuracy! this is trainloop checkin. {self.tracker.average('Acc/trainstep')}")
+        log_data(
+            {"Acc/Trainstep": self.tracker.average("Acc/trainstep")},
+            epoch * dataloader_len + step,
+        )
+
+        self.tracker.reset("Loss/trainstep")
+        self.tracker.reset("Acc/trainstep")
+
+    def on_epoch_checkin(self, epoch):
+        if self.hasnan():
+            # revert
+            self.resume()
+
+        val_loss = float("inf")
+        try:
+            val_loss = self.tracker.average("Loss/val/epoch")
+        except KeyError:
+            pass
+
+        self.save(
+            val_loss if val_loss < float("inf") else self.tracker.average("Loss/epoch")
+        )
+
+        log_data(
+            {
+                "Loss/Epoch": self.tracker.average("Loss/epoch"),
+                "Loss/Val/Epoch": val_loss,
+            },
+            epoch,
+        )
+
+        # log_data(
+        #     {"Acc/Trainstep": self.tracker.average("Acc/trainstep")},
+        #     epoch,
+        # )
+        #print(self.tracker.average("Acc/trainstep"))
+
+        self.tracker.reset("Acc/epoch")
+
+        self.tracker.reset("Loss/epoch")
+        self.tracker.reset("Loss/val/epoch")
+
+        self.write_resume(epoch)
+
+    def eval_model(self, data):
+        x, _ = data
+        x = x.to(self.device)
+
+        recon_x, mu, logvar = self.net(x)
+
+        loss = self.net.loss_function(recon_x, x, mu, logvar)
+
+        return loss, 0
+
+    def trainstep(self, data):
+        self.optimizer.zero_grad()
+
+        loss, acc = self.eval_model(data)
+
+        self.tracker.add("Loss/trainstep", loss.item())
+        self.tracker.add("Loss/epoch", loss.item())
+
+        # Backward pass and optimization
+        loss.backward()
+        self.optimizer.step()
+
+        return loss, acc
+
+    @torch.no_grad()  # decorator yay
+    def valstep(self, data):
+        loss, acc = self.eval_model(data)
+
+        self.tracker.add("Loss/valstep", loss.item())
+        self.tracker.add("Loss/val/epoch", loss.item())
+
+        return loss, acc
+
+    def val_loop(self, val_loader):
+        if val_loader is not None:
+            for step, data in enumerate(
+                test_tqdm := tqdm(val_loader, leave=False, dynamic_ncols=True)
+            ):
+                self.valstep(data)
+                avg_val_loss = self.tracker.average("Loss/val/epoch")
+                test_tqdm.set_postfix({"Val Loss": f"{avg_val_loss:.3f}"})
+
+    def train_loop(self, dataloader, epoch):
+        for step, data in enumerate(
+            train_tqdm := tqdm(dataloader, leave=False, dynamic_ncols=True)
+        ):
             self.trainstep(data)
+
+            avg_train_loss = self.tracker.average("Loss/trainstep")
+            train_tqdm.set_postfix({"Train Loss": f"{avg_train_loss:.3f}"})
 
             if (
                 step % self.trainstep_checkin_interval
@@ -196,11 +266,13 @@ class TrainingManager:
             ):
                 self.on_trainloop_checkin(epoch, step, len(dataloader))
 
-        if val_loader is not None:
-            for step, data in enumerate(
-                tqdm(val_loader, leave=False, dynamic_ncols=True)
-            ):
-                self.valstep(data)
+    def epoch(self, epoch: int, dataloader, val_loader=None):
+
+        self.net.train()
+        self.train_loop(dataloader, epoch)
+
+        self.net.eval()
+        self.val_loop(val_loader)
 
         self.on_epoch_checkin(epoch)
 
@@ -212,9 +284,43 @@ class TrainingManager:
         if dataloader is not None:
             self.dataloader = dataloader
 
-        for e in trange(self.epochs, dynamic_ncols=True):
+        for e in trange(
+            self.epochs, dynamic_ncols=True, unit_scale=True, unit_divisor=60
+        ):
 
             if e <= self.resume_amt:
                 continue
 
             self.epoch(e, self.dataloader, self.val_dataloader)
+
+        print("All done!")
+        gc.collect()
+        os.system("""osascript -e 'display notification "Training complete" with title "Training Complete"'""")
+
+    def nan_debug(self):
+        torch.autograd.set_detect_anomaly(True)
+
+        def forward_hook(module, input, output):
+            if isinstance(output, tuple):
+                return
+            if torch.isnan(output).any() or torch.isinf(output).any():
+                print(f"NaNs/Infs detected in {module}")
+
+        for module in self.net.modules():
+            module.register_forward_hook(forward_hook)
+        self.val_loop(self.val_dataloader)
+
+    def get_param_count(self):
+        return sum(p.numel() for p in self.net.parameters())
+
+    def profile_trainstep(self):
+        
+        self.net.train()
+        data = next(iter(self.dataloader))
+
+        #https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html
+        with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+            with record_function("train_step"):
+                self.trainstep(data)
+        
+        print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))

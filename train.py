@@ -36,10 +36,10 @@ trainer = TrainingManager(
 )
 
 
-for batch, attn_mask in dataloader:
+for batch, _ in dataloader:
     init_logger(
         net,
-        (batch.to(device), attn_mask.to(device)),
+        (batch.to(device)),
         dir=os.path.join(EXPERIMENT_DIRECTORY, "tensorboard"),
     )
     break

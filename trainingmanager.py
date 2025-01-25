@@ -63,11 +63,15 @@ class TrainingManager:
         self.trainstep_checkin_interval = trainstep_checkin_interval
         self.tracker = ValueTracker()
         self.dir = dir
+
+        self.val_dataloader = None
         init_logger(
             self.net,
             torch.rand(1, 1, 28, 28).to(device),
             dir=os.path.join(dir, "tensorboard"),
         )
+
+        self.resume_amt = self.get_resume()
 
     def hasnan(self):
         for _, param in self.net.named_parameters():
@@ -96,6 +100,8 @@ class TrainingManager:
 
         self.tracker.add("Loss/trainstep", loss.item())
         self.tracker.add("Loss/epoch", loss.item())
+
+
 
     @torch.no_grad()
     def valstep(self, data):

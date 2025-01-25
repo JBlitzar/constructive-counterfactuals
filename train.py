@@ -30,6 +30,7 @@ trainer = TrainingManager(
     net=net,
     dir=EXPERIMENT_DIRECTORY,
     dataloader=dataloader,
+    val_dataloader=testloader,
     device=device,
     trainstep_checkin_interval=100,
     epochs=100,

@@ -7,7 +7,6 @@ import os
 transform_pipeline = transforms.Compose([
     transforms.ToTensor(),
     # transforms.ConvertImageDtype(torch.float32),
-    transforms.Normalize((0.1307,), (0.3081,))
 ])
 
 def get_train_dataset():

@@ -165,13 +165,13 @@ class TrainingManager:
             epoch * dataloader_len + step,
         )
         #print(f"Look at me! I'm logging accuracy! this is trainloop checkin. {self.tracker.average('Acc/trainstep')}")
-        log_data(
-            {"Acc/Trainstep": self.tracker.average("Acc/trainstep")},
-            epoch * dataloader_len + step,
-        )
+        # log_data(
+        #     {"Acc/Trainstep": self.tracker.average("Acc/trainstep")},
+        #     epoch * dataloader_len + step,
+        # )
 
         self.tracker.reset("Loss/trainstep")
-        self.tracker.reset("Acc/trainstep")
+        #self.tracker.reset("Acc/trainstep")
 
     def on_epoch_checkin(self, epoch):
         if self.hasnan():

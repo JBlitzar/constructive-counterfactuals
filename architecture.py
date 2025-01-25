@@ -87,7 +87,15 @@ class Simple_VAE(nn.Module):
         x_recon = self.decode(z)
         return x_recon, mu, logvar
 
-    def loss_function(self, recon_x, x, mu, logvar):
-        BCE = nn.functional.binary_cross_entropy(recon_x, x, reduction="sum")
-        KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
-        return BCE + KLD
+    def loss_function(self, reconstruction,x, mean, variance, kl_weight=1):
+        #https://github.com/pytorch/examples/blob/main/vae/main.py
+
+        BCE = F.binary_cross_entropy(reconstruction, x, reduction='sum')
+
+        # see Appendix B from VAE paper:
+        # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
+        # https://arxiv.org/abs/1312.6114
+        # 0.5 * sum(1 + log(sigma^2) - mu^2 - sigma^2)
+        KLD = -0.5 * torch.sum(1 + variance - mean.pow(2) - variance.exp())
+
+        return BCE + KLD * kl_weight#, BCE, KLD * kl_weight

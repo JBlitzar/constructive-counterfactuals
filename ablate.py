@@ -5,6 +5,8 @@
 
 import torch
 import torch.nn as nn
+import torchvision
+import matplotlib.pyplot as plt
 from architecture import Simple_VAE
 from dataset import get_train_dataset, get_dataloader
 device = "mps" if torch.backends.mps.is_available() else "cpu"
@@ -14,48 +16,48 @@ run = "runs/vae_test1"
 net = Simple_VAE().to(device)
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
 
-
-
-
-
-
 def get_loss(image, net):
     reconstructed, mean, logvar = net(image)
-
     loss = net.loss_function(reconstructed, image, mean, logvar)
-
     return loss
 
-def ablate(image, net,thresh=0.1):
-    
+def ablate(image, net, thresh=0.01):
     net.eval()
-        
-    #image.requires_grad = True
-
+    
     loss = get_loss(image, net)
-
     loss.backward()
 
     with torch.no_grad():
         for param in net.parameters():
             if param.grad is not None:
-                param.grad[torch.abs(param.grad) > thresh] = 0
+                param.grad[torch.abs(param.grad) > thresh] = 999
 
+    optimizer = torch.optim.Adam(net.parameters())
+    optimizer.step()
 
+    reconstructed, _, _ = net(image)
+    return reconstructed
+
+def visualize_before_after(image, reconstructed):
+    # Create a grid of images
+    grid = torchvision.utils.make_grid(torch.cat((image, reconstructed), dim=0))
+    plt.imshow(grid.permute(1, 2, 0).cpu().numpy())
+    plt.title('Before and After Reconstruction')
+    plt.show()
+
+# Example usage
 trainset = get_train_dataset()
+dataloader = get_dataloader(trainset, batch_size=1)
 
-dataloader = get_dataloader(trainset)
+for image, _ in dataloader:
+    image = image.to(device)
 
-for item, _ in dataloader:
-    
-    before = get_loss(item.to(device), net)
+    original, _, _ = net(image)
+    before = get_loss(image, net)
 
-    ablate(item.to(device), net)
+    ablated = ablate(image, net)
+    after = get_loss(image, net)
 
-    after = get_loss(item.to(device), net)
-
-    print(before, after)
-
+    print(before.item(), after.item())
+    visualize_before_after(original, ablated)
     break
-    
-    

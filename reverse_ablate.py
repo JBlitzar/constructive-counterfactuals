@@ -3,7 +3,6 @@
 # https://zheng-dai.github.io/AblationBasedCounterfactuals/
 # https://github.com/zheng-dai/GenEns
 
-# Check out that diff: tensor(6376.6074, device='mps:0', grad_fn=<AddBackward0>) tensor(34779.3555, device='mps:0', grad_fn=<AddBackward0>)
 
 import torch
 import torch.nn as nn
@@ -40,6 +39,7 @@ def loss_recon_package(image, net):
 
     return loss.item(), reconstructed
 
+# Name idea: constructive counterfactuals
 def reverse_ablate(image, net,thresh=500,n = 10,use_threshold = True):
 
     
@@ -53,19 +53,19 @@ def reverse_ablate(image, net,thresh=500,n = 10,use_threshold = True):
     loss.backward()
 
     with torch.no_grad():
-        grads = []
-        for param in net.parameters():
-            if param.grad is not None:
-                grads.append(param.grad.view(-1))
+        # grads = []
+        # for param in net.parameters():
+        #     if param.grad is not None:
+        #         grads.append(param.grad.view(-1))
         
-        grads = torch.cat(grads)
-        top_n_values, _ = torch.topk(torch.abs(grads), n)
+        # grads = torch.cat(grads)
+        # top_n_values, _ = torch.topk(torch.abs(grads), n)
 
-        threshold = thresh if use_threshold else top_n_values[-1] 
-
+        # threshold = thresh if use_threshold else top_n_values[-1] 
+        threshold = thresh
         for param in net.parameters():
             if param.grad is not None:
-                param[torch.abs(param.grad) >= threshold] = torch.sign(param.grad[torch.abs(param.grad) >= threshold]) * threshold
+                param.data[torch.abs(param.grad) >= threshold] = -torch.sign(param.grad[torch.abs(param.grad) >= threshold]) * 0.1
 
 def before_after(item, net):
     before_loss, before_recon = loss_recon_package(item, net)

@@ -14,7 +14,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
-run = "runs/vae_512_no0"#"runs/vae_test1"
+run = "runs/vae_linear_512_no0"#"runs/vae_512_no0"#"runs/vae_test1"
 
 net = Simple_VAE().to(device)
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
@@ -40,7 +40,7 @@ def loss_recon_package(image, net):
 
     return loss.item(), reconstructed
 
-def ablate(image, net,thresh=500,n = 10,use_threshold = True):
+def reverse_ablate(image, net,thresh=500,n = 10,use_threshold = True):
 
     
     
@@ -65,7 +65,7 @@ def ablate(image, net,thresh=500,n = 10,use_threshold = True):
 
         for param in net.parameters():
             if param.grad is not None:
-                param[torch.abs(param.grad) >= threshold] = 0
+                param[torch.abs(param.grad) >= threshold] = torch.sign(param.grad[torch.abs(param.grad) >= threshold]) * threshold
 
 def before_after(item, net):
     before_loss, before_recon = loss_recon_package(item, net)
@@ -77,7 +77,7 @@ def before_after(item, net):
     return before_loss, before_recon, after_loss, after_recon
 
 
-trainset = get_train_dataset()
+trainset = get_train_dataset(filter_override=True)
 
 dataloader = get_dataloader(trainset)
 
@@ -88,22 +88,23 @@ for dummy_item, _ in dataloader:
     
     break
 
-for item, _ in dataloader:
+for item, label in dataloader:
+    if label == 0:
+        print("found 0")
+        before_loss, before_recon, after_loss, after_recon = before_after(item.to(device), net)
 
-    before_loss, before_recon, after_loss, after_recon = before_after(item.to(device), net)
+        item = item.to(device)
 
-    item = item.to(device)
-
-    dummy_loss, dummy_recon = loss_recon_package(dummy, net)
-
-
-    print(before_loss, after_loss)
-    print(before_dummy_loss, dummy_loss)
-    grid = torchvision.utils.make_grid([item[0], before_recon[0], after_recon[0], dummy[0], before_dummy_recon[0], dummy_recon[0]], nrow=3).cpu().numpy()
-    plt.imshow(np.transpose(grid, (1, 2, 0)))
-    plt.show()
+        dummy_loss, dummy_recon = loss_recon_package(dummy, net)
 
 
-    break
+        print(before_loss, after_loss)
+        print(before_dummy_loss, dummy_loss)
+        grid = torchvision.utils.make_grid([item[0], before_recon[0], after_recon[0], dummy[0], before_dummy_recon[0], dummy_recon[0]], nrow=3).cpu().numpy()
+        plt.imshow(np.transpose(grid, (1, 2, 0)))
+        plt.show()
+
+
+        break
     
     

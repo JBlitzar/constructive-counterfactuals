@@ -13,7 +13,7 @@ FILTER_ZERO = True
 N_TRAIN = 512
 
 
-def get_train_dataset():
+def get_train_dataset(filter_override=False):
     dataset = dset.MNIST(
         root=os.path.expanduser("~/torch_datasets/mnist"),
         train=True,
@@ -21,7 +21,7 @@ def get_train_dataset():
         transform=transform_pipeline
     )
 
-    if FILTER_ZERO:
+    if FILTER_ZERO and not filter_override:
         filtered_indices = [i for i, (_, target) in enumerate(dataset) if target != 0]
         dataset = torch.utils.data.Subset(dataset, filtered_indices)
 
@@ -30,6 +30,8 @@ def get_train_dataset():
         dataset = torch.utils.data.Subset(dataset, indices[:N_TRAIN])
 
     return dataset
+
+
 
 def get_test_dataset():
     dataset = dset.MNIST(

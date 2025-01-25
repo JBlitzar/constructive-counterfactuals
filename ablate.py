@@ -42,8 +42,6 @@ def loss_recon_package(image, net):
 
 def ablate(image, net,thresh=500,n = 10,use_threshold = True):
 
-    
-    
     net.eval()
         
     #image.requires_grad = True

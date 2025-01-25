@@ -40,9 +40,9 @@ def loss_recon_package(image, net):
 
     return loss.item(), reconstructed
 
-def ablate(image, net,thresh=200):
+def ablate(image, net,thresh=200,n = 10,use_threshold = False):
 
-    n = 10
+    
     
     net.eval()
         
@@ -60,7 +60,8 @@ def ablate(image, net,thresh=200):
         
         grads = torch.cat(grads)
         top_n_values, _ = torch.topk(torch.abs(grads), n)
-        threshold = top_n_values[-1]
+        
+        threshold = thresh if use_threshold else top_n_values[-1] 
 
         for param in net.parameters():
             if param.grad is not None:

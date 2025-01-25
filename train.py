@@ -12,7 +12,7 @@ from trainingmanager import TrainingManager
 
 
 # TODO: setup experiment dir
-EXPERIMENT_DIRECTORY = "runs/vae_test1"
+EXPERIMENT_DIRECTORY = "runs/vae_512_no0"
 
 
 device = "mps" if torch.backends.mps.is_available() else "cpu"
@@ -33,7 +33,7 @@ trainer = TrainingManager(
     val_dataloader=testloader,
     device=device,
     trainstep_checkin_interval=100,
-    epochs=100,
+    epochs=50,
 )
 
 

@@ -3,6 +3,9 @@
 # https://zheng-dai.github.io/AblationBasedCounterfactuals/
 # https://github.com/zheng-dai/GenEns
 
+# Loss diff with reverse ablation: 170.3783721923828 160.09910583496094
+
+# Loss diff after reverse ablation on non-zero sample (control): 126.66336059570312 127.0302734375
 
 import torch
 import torch.nn as nn
@@ -13,7 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
-run = "runs/vae_linear_512_no0"#"runs/vae_512_no0"#"runs/vae_test1"
+run = "runs/vae_l5_linear_512_no0"#"runs/vae_linear_512_no0"#"runs/vae_512_no0"#"runs/vae_test1"
 
 net = Simple_VAE().to(device)
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
@@ -23,24 +26,30 @@ net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
 
 
 
-def get_loss(image, net):
+def get_loss(image, net, mse_instead=False):
     reconstructed, mean, logvar = net(image)
 
-    loss = net.loss_function(reconstructed, image, mean, logvar)
+    if mse_instead:
+        loss = nn.MSELoss()(reconstructed, image)
+    else:
+        loss = net.loss_function(reconstructed, image, mean, logvar)
 
     return loss
 
 
 @torch.no_grad()
-def loss_recon_package(image, net):
+def loss_recon_package(image, net, mse_instead=False):
     reconstructed, mean, logvar = net(image)
 
-    loss = net.loss_function(reconstructed, image, mean, logvar)
+    if mse_instead:
+        loss = nn.MSELoss()(reconstructed, image)
+    else:
+        loss = net.loss_function(reconstructed, image, mean, logvar)
 
     return loss.item(), reconstructed
 
 # Name idea: constructive counterfactuals
-def reverse_ablate(image, net,thresh=500,n = 10,use_threshold = True):
+def reverse_ablate(image, net,strength=0.6):
 
     
     
@@ -53,19 +62,10 @@ def reverse_ablate(image, net,thresh=500,n = 10,use_threshold = True):
     loss.backward()
 
     with torch.no_grad():
-        # grads = []
-        # for param in net.parameters():
-        #     if param.grad is not None:
-        #         grads.append(param.grad.view(-1))
-        
-        # grads = torch.cat(grads)
-        # top_n_values, _ = torch.topk(torch.abs(grads), n)
-
-        # threshold = thresh if use_threshold else top_n_values[-1] 
-        threshold = thresh
+ 
         for param in net.parameters():
             if param.grad is not None:
-                param.data[torch.abs(param.grad) >= threshold] -= torch.sign(param.grad[torch.abs(param.grad) >= threshold]) * 0.1
+                param = param - torch.sign(param.grad) *strength
 
 def before_after(item, net):
     before_loss, before_recon = loss_recon_package(item, net)
@@ -79,7 +79,7 @@ def before_after(item, net):
 
 trainset = get_train_dataset(filter_override=True)
 
-dataloader = get_dataloader(trainset)
+dataloader = get_dataloader(trainset, batch_size=1)
 
 for dummy_item, _ in dataloader:
     dummy = dummy_item.to(device)

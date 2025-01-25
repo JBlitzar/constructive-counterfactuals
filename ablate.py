@@ -14,7 +14,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
-run = "runs/vae_512_no0"#"runs/vae_test1"
+run = "runs/vae_l5_linear_512_no0"#"runs/vae_512_no0"#"runs/vae_test1"
 
 net = Simple_VAE().to(device)
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
@@ -40,7 +40,7 @@ def loss_recon_package(image, net):
 
     return loss.item(), reconstructed
 
-def ablate(image, net,thresh=500,n = 10,use_threshold = True):
+def ablate(image, net,thresh=50,n = 10,use_threshold = True):
 
     net.eval()
         
@@ -77,7 +77,7 @@ def before_after(item, net):
 
 trainset = get_train_dataset()
 
-dataloader = get_dataloader(trainset)
+dataloader = get_dataloader(trainset, batch_size=1)
 
 for dummy_item, _ in dataloader:
     dummy = dummy_item.to(device)

@@ -22,7 +22,7 @@ net = Simple_VAE().to(device)
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
 
 
-
+USE_MSE_INSTEAD = True
 
 
 
@@ -49,15 +49,17 @@ def loss_recon_package(image, net, mse_instead=False):
     return loss.item(), reconstructed
 
 # Name idea: constructive counterfactuals
-def reverse_ablate(image, net,strength=0.6):
+def reverse_ablate(image, net,strength=0.001):
 
     
     
     net.eval()
+
+    net.zero_grad()
         
     #image.requires_grad = True
 
-    loss = get_loss(image, net)
+    loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
 
     loss.backward()
 
@@ -65,14 +67,15 @@ def reverse_ablate(image, net,strength=0.6):
  
         for param in net.parameters():
             if param.grad is not None:
-                param = param - torch.sign(param.grad) *strength
+                #param.data = param - param.grad * strength
+                param.data = param - torch.sign(param.grad) * strength
 
 def before_after(item, net):
-    before_loss, before_recon = loss_recon_package(item, net)
+    before_loss, before_recon = loss_recon_package(item, net, mse_instead=USE_MSE_INSTEAD)
 
     reverse_ablate(item, net)
 
-    after_loss, after_recon = loss_recon_package(item, net)
+    after_loss, after_recon = loss_recon_package(item, net, mse_instead=USE_MSE_INSTEAD)
 
     return before_loss, before_recon, after_loss, after_recon
 
@@ -96,7 +99,9 @@ for item, label in dataloader:
 
         item = item.to(device)
 
-        dummy_loss, dummy_recon = loss_recon_package(dummy, net)
+        dummy_loss, dummy_recon = loss_recon_package(dummy, net, mse_instead=USE_MSE_INSTEAD)
+
+        assert torch.ne(before_recon, after_recon).all()
 
 
         print(before_loss, after_loss)

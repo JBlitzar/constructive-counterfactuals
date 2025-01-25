@@ -11,7 +11,7 @@ import torchvision
 from trainingmanager import TrainingManager
 
 
-# TODO: setup experiment dir
+
 EXPERIMENT_DIRECTORY = "runs/vae_l5_linear_512_no0"
 
 
@@ -25,7 +25,7 @@ testloader = get_dataloader(get_test_dataset())
 net = Simple_VAE()
 net.to(device)
 
-# TODO: configure
+
 trainer = TrainingManager(
     net=net,
     dir=EXPERIMENT_DIRECTORY,

@@ -30,7 +30,6 @@ class Reshape(nn.Module):
         return x.view(self.shape)
 
 
-# TODO: Make model
 class Simple_VAE(nn.Module):
     def __init__(self, latent_dim=20):
         super().__init__()

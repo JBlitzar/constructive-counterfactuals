@@ -70,7 +70,7 @@ def reverse_ablate(image, net,thresh=500,n = 10,use_threshold = True):
 def before_after(item, net):
     before_loss, before_recon = loss_recon_package(item, net)
 
-    ablate(item, net)
+    reverse_ablate(item, net)
 
     after_loss, after_recon = loss_recon_package(item, net)
 
@@ -89,7 +89,8 @@ for dummy_item, _ in dataloader:
     break
 
 for item, label in dataloader:
-    if label == 0:
+    print("loopinginging")
+    if label[0] == 0:
         print("found 0")
         before_loss, before_recon, after_loss, after_recon = before_after(item.to(device), net)
 

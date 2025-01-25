@@ -23,17 +23,22 @@ def get_loss(image, net):
 
 def ablate(image, net, thresh=0.01):
     net.eval()
+    optimizer = torch.optim.SGD([image], lr=0.1)
+    net.zero_grad()
+    optimizer.zero_grad()
     
     loss = get_loss(image, net)
     loss.backward()
 
-    with torch.no_grad():
-        for param in net.parameters():
-            if param.grad is not None:
-                param.grad[torch.abs(param.grad) > thresh] = 999
+    for param in net.parameters():
+        if param.grad is not None:
+            param.grad = -param.grad
 
-    optimizer = torch.optim.Adam(net.parameters())
+    
     optimizer.step()
+
+
+    
 
     reconstructed, _, _ = net(image)
     return reconstructed

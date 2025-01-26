@@ -15,7 +15,7 @@ N_TRAIN = 512
 
 def get_train_dataset(filter_override=False):
     dataset = dset.MNIST(
-        root=os.path.expanduser("~/torch_datasets/mnist"),
+        root="./mnist",
         train=True,
         download=True,
         transform=transform_pipeline
@@ -35,7 +35,7 @@ def get_train_dataset(filter_override=False):
 
 def get_test_dataset():
     dataset = dset.MNIST(
-        root=os.path.expanduser("~/torch_datasets/mnist"),
+        root=os.path.expanduser("./mnist"),
         train=False,
         download=True,
         transform=transform_pipeline
@@ -49,7 +49,7 @@ def get_test_dataset():
 
 def get_val_dataset():
     dataset = dset.MNIST(
-        root=os.path.expanduser("~/torch_datasets/mnist"),
+        root=os.path.expanduser("./mnist"),
         train=False,
         download=True,
         transform=transform_pipeline

@@ -1,7 +1,7 @@
 **/best.pt
 **/latest.pt
 !runs/vae_l5_linear_512_no0/ckpt/best.pt
-
+mnist/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

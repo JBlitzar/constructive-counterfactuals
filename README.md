@@ -38,4 +38,4 @@ The rows and columns follow the same conventions as the first figure. The third 
 ---
 
 All code is available in this repository, and model weights are located at runs/vae_l5_linear_512_no0/ckpt/best.pt.
-Running `python constructive_counterfactuals.py` should work out-of-the-box if you have all of the proper requirements installed.
+Running `python constructive_counterfactuals.py` should work out-of-the-box if you have all of the proper requirements installed (Namely an updated installation of pytorch).

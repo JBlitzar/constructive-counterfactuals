@@ -1,3 +1,3 @@
 # Constructive Counterfactuals
 
-Using the idea of ablation-based counterfactuals combined with a similar idea from FGSM to allow an old model to learn from new data from just one example, without retraining.
+Inspired by Zheng Dai's work with _Ablation Based Counterfactuals_ (https://arxiv.org/abs/2406.07908), this repository presents some experiments. I have reproduced Dai's results with a VAE and experimented with a new idea, called _Constructive Counterfactuals_. This method draws off of ABCs, but presents the reverse: Instead of ablating a model to prevent it from learning from a specific piece of data, manipulating the gradients to allow a model to generalize from new data. Preliminary results show that it's possible, at least for VAEs, to quickly generalize to a new form of data with a single reverse ablation step.

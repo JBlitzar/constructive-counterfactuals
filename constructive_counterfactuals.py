@@ -3,7 +3,7 @@
 # https://zheng-dai.github.io/AblationBasedCounterfactuals/
 # https://github.com/zheng-dai/GenEns
 
-# Loss diff with reverse ablation: 170.3783721923828 160.09910583496094
+# Loss diff with reverse ablation (VAE loss): 170.3783721923828 160.09910583496094
 
 # Loss diff after reverse ablation on non-zero sample (control): 126.66336059570312 127.0302734375
 
@@ -16,7 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
-run = "runs/vae_l5_linear_512_no0"#"runs/vae_linear_512_no0"#"runs/vae_512_no0"#"runs/vae_test1"
+run = "runs/vae_l5_linear_512_no0"
 
 net = Simple_VAE().to(device)
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))

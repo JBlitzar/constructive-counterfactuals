@@ -34,3 +34,8 @@ Notably, this step not only decreases loss and improves reconstruction on the on
 <img src="results/constructive_counterfactuals_example.png" width="30%">
 
 The rows and columns follow the same conventions as the first figure. The third row now shows the increase in quality for samples of the same class that were _never shown to the model._ By reverse ablating just once with a single sample, the model was able to generalize and improve when given a similar task, while not degrading the rest of it.
+
+---
+
+All code is available in this repository, and model weights are located at runs/vae_l5_linear_512_no0/ckpt/best.pt.
+Running `python constructive_counterfactuals.py` should work out-of-the-box if you have all of the proper requirements installed.

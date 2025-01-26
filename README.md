@@ -19,7 +19,7 @@ Results:
 
 ### Part 2: Teaching an old model new tricks: _Constructive Counterfactuals_
 
-Going further, I've began experimenting with a new method, dubbed _Constructive Counterfactuals_. This method draws off of ABCs, but presents the reverse: Instead of ablating a model to prevent it from learning from a specific piece of data, using gradient-based methods to manipulate the parameters to allow a model to generalize from new data in a single step, _without retraining_. Preliminary results show that it's possible, at least for VAEs, to quickly generalize to a new form of data with a single reverse ablation step.
+Going further, I've began experimenting with a new method, dubbed _Constructive Counterfactuals_. This method draws off of ABCs, but presents the reverse: Instead of ablating a model to prevent it from learning from a specific piece of data, we can add new data into a model _without retraining_ by using gradient-based methods to manipulate the parameters to allow a model. Preliminary results show that it's possible, at least for VAEs, to quickly generalize to a new form of data with a single reverse ablation step.
 
 ---
 

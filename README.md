@@ -1,5 +1,7 @@
 # Constructive Counterfactuals
 
+### By Jacob Buckhouse
+
 Inspired by Zheng Dai's work with _Ablation Based Counterfactuals_ (https://arxiv.org/abs/2406.07908), this repository presents some experiments.
 First, we aim to reproduce Dai and Glifford's results. A slightly different setup was used, with a VAE rather than a diffusion model. Furthermore, rather than ablating by removing a model from an ensemble where each model was trained on a subset, we instead ablate simply by zeroing the parameters strongly activated by a specific sample. (see [ablate.py](ablate.py))
 

@@ -19,7 +19,7 @@ Results:
 
 ### Part 2: Teaching an old model new tricks: _Constructive Counterfactuals_
 
-Going further, I've began experimenting with a new method, dubbed _Constructive Counterfactuals_. This method draws off of ABCs, but presents the reverse: Instead of ablating a model to prevent it from learning from a specific piece of data, we can add new data into a model _without retraining_ by using gradient-based methods to manipulate the parameters to allow a model. Preliminary results show that it's possible, at least for VAEs, to quickly generalize to a new form of data with a single reverse ablation step.
+Going further, I've began experimenting with a new method, dubbed _Constructive Counterfactuals_. This method draws off of ABCs, but presents the reverse: Instead of ablating a model to prevent it from learning from a specific piece of data, we can add new data into a model _without retraining_ by using gradient-based methods to manipulate the parameters. Preliminary results show that it's possible, at least for VAEs, to quickly generalize to a new form of data with a single reverse ablation step.
 
 ---
 
@@ -47,7 +47,12 @@ Notably, this step not only decreases loss and improves reconstruction on the on
 
 The rows and columns follow the same conventions as the first figure. The third row now shows the increase in quality for samples of the same class that were _never shown to the model._ By reverse ablating just once with a single sample, the model was able to generalize and improve when given a similar task, while not degrading the rest of it.
 
+Results:
+
+- Initial results are promising that you can add data in a single gradient step rather than retraining. Models fine-tuned in this way seem to generalize reasonably well after exposure to even one new sample.
+
 ---
 
 All code is available in this repository, and model weights are located at runs/vae_l5_linear_512_no0/ckpt/best.pt.
-Running `python constructive_counterfactuals.py` should work out-of-the-box if you have all of the proper requirements installed (Namely an updated installation of pytorch).
+
+You should be able to reproduce my results by running `constructive_counterfactuals.py`

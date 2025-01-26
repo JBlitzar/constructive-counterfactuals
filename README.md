@@ -4,7 +4,7 @@
 
 ### Part 1: Reproducing _Ablation Based Counterfactuals_
 
-Inspired by Zheng Dai and David Glifford's work with _Ablation Based Counterfactuals_ (https://arxiv.org/abs/2406.07908), this repository presents some experiments and expansions.
+Inspired by Zheng Dai and David Glifford's work with _Ablation Based Counterfactuals_ ([arXiv:2406.07908v1](https://arxiv.org/abs/2406.07908)), this repository presents some experiments and expansions.
 First, my aim was to to reproduce their results. In order to encourage rapid experimentation and accessibility, I implemented the model as a VAE instead of a diffusion model. Additionally, rather than ablating by removing a model from an ensemble where each model was trained on a subset, I instead ablate simply by zeroing the parameters strongly activated by a specific sample: This allows these methods to be generalized to the most common architectures, rather than constructing an ensemble specificically for examining counterfactuals. (see [ablate.py](ablate.py) and [architecture.py](architecture.py))
 
 <img src="results/realistic_ablation.png" width="30%">

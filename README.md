@@ -3,7 +3,7 @@
 ### By Jacob Buckhouse
 
 Inspired by Zheng Dai's work with _Ablation Based Counterfactuals_ (https://arxiv.org/abs/2406.07908), this repository presents some experiments.
-First, we aim to reproduce Dai and Glifford's results. A slightly different setup was used, with a VAE rather than a diffusion model. Furthermore, rather than ablating by removing a model from an ensemble where each model was trained on a subset, we instead ablate simply by zeroing the parameters strongly activated by a specific sample. (see [ablate.py](ablate.py))
+First, I my aim was to to reproduce Dai and Glifford's results. In order to encourage rapid experimentation and accessibility, I reproduced it as a VAE instead of a diffusion model. Furthermore, rather than ablating by removing a model from an ensemble where each model was trained on a subset, I instead ablate simply by zeroing the parameters strongly activated by a specific sample: This allows these methods to be generalized to the most common architectures, rather than constructing an ensemble specificically for examining counterfactuals. (see [ablate.py](ablate.py))
 
 <img src="results/realistic_ablation.png" width="30%">
 
@@ -15,7 +15,7 @@ I have reproduced the results presented in _Ablation Based Counterfactuals_ with
 
 ---
 
-I started by gathering a subset of MNIST containing only 512 samples. Within this subset, I hid all samples of class 0 when training. The VAE trained successfully, struggling to reconstruct images of class 0 after training since they were excluded from the training data, as expected. Next, took a single sample and essentially applied ablation in reverse: updating the parameters based off of the sign of the gradient multiplied by a constant. This method is similar to both FGSM and a step in the traditional gradient descent algorithm. However, unlike gradient descent, we only do this for a single step.
+I started by gathering a subset of MNIST containing only 512 samples. Within this subset, I hid all samples of class 0 when training. The VAE trained successfully, struggling to reconstruct images of class 0 after training since they were excluded from the training data, as expected. Next, took a single sample and essentially applied ablation in reverse: updating the parameters based off of the sign of the gradient multiplied by a constant. This method is similar to both FGSM and a step in the traditional gradient descent algorithm. However, unlike gradient descent, I only do this for a single step.
 
 ([constructive_counterfactuals.py](constructive_counterfactuals.py))
 

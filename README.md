@@ -2,16 +2,24 @@
 
 ### By Jacob Buckhouse
 
-Inspired by Zheng Dai's work with _Ablation Based Counterfactuals_ (https://arxiv.org/abs/2406.07908), this repository presents some experiments.
-First, I my aim was to to reproduce Dai and Glifford's results. In order to encourage rapid experimentation and accessibility, I reproduced it as a VAE instead of a diffusion model. Furthermore, rather than ablating by removing a model from an ensemble where each model was trained on a subset, I instead ablate simply by zeroing the parameters strongly activated by a specific sample: This allows these methods to be generalized to the most common architectures, rather than constructing an ensemble specificically for examining counterfactuals. (see [ablate.py](ablate.py))
+### Part 1: Reproducing _Ablation Based Counterfactuals_
+
+Inspired by Zheng Dai and David Glifford's work with _Ablation Based Counterfactuals_ (https://arxiv.org/abs/2406.07908), this repository presents some experiments and expansions.
+First, my aim was to to reproduce their results. In order to encourage rapid experimentation and accessibility, I implemented the model as a VAE instead of a diffusion model. Additionally, rather than ablating by removing a model from an ensemble where each model was trained on a subset, I instead ablate simply by zeroing the parameters strongly activated by a specific sample: This allows these methods to be generalized to the most common architectures, rather than constructing an ensemble specificically for examining counterfactuals. (see [ablate.py](ablate.py) and [architecture.py](architecture.py))
 
 <img src="results/realistic_ablation.png" width="30%">
 
 The first column represents ground truth. The second column represents the VAE's reconstruction before ablation. The third column represents the reconstruction after ablation. Note that ablation was only applied to the first sample. While the first row shows the decrease in quality, the second row further proves that other training samples are unaffected.
 
+Results:
+
+- I was able to successfully reproduce Dai and Glifford's results in _Ablation Based Counterfactuals_, demonstrating that the process remains sound even with variation in architecture and exact implementation of the ablation.
+
 ---
 
-I have reproduced the results presented in _Ablation Based Counterfactuals_ with a VAE and experimented with a new idea, called _Constructive Counterfactuals_. This method draws off of ABCs, but presents the reverse: Instead of ablating a model to prevent it from learning from a specific piece of data, using gradient-based methods to manipulate the parameters to allow a model to generalize from new data in a single step, _without retraining_. Preliminary results show that it's possible, at least for VAEs, to quickly generalize to a new form of data with a single reverse ablation step.
+### Part 2: Teaching an old model new tricks: _Constructive Counterfactuals_
+
+Going further, I've began experimenting with a new method, dubbed _Constructive Counterfactuals_. This method draws off of ABCs, but presents the reverse: Instead of ablating a model to prevent it from learning from a specific piece of data, using gradient-based methods to manipulate the parameters to allow a model to generalize from new data in a single step, _without retraining_. Preliminary results show that it's possible, at least for VAEs, to quickly generalize to a new form of data with a single reverse ablation step.
 
 ---
 

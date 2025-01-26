@@ -48,26 +48,17 @@ def loss_recon_package(image, net, mse_instead=False):
 
     return loss.item(), reconstructed
 
-# Name idea: constructive counterfactuals
+
 def reverse_ablate(image, net,strength=0.001):
-
-    
-    
     net.eval()
-
     net.zero_grad()
-        
-    #image.requires_grad = True
 
     loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
-
     loss.backward()
 
     with torch.no_grad():
- 
         for param in net.parameters():
             if param.grad is not None:
-                #param.data = param - param.grad * strength
                 param.data = param - torch.sign(param.grad) * strength
 
 def before_after(item, net):

@@ -87,9 +87,18 @@ dataloader = get_dataloader(trainset, batch_size=1)
 for dummy_item, _ in dataloader:
     dummy = dummy_item.to(device)
 
-    before_dummy_loss, before_dummy_recon = loss_recon_package(dummy, net)
+    before_dummy_loss, before_dummy_recon = loss_recon_package(dummy, net, mse_instead=USE_MSE_INSTEAD)
     
     break
+
+for dummy_item_zero, label in dataloader:
+    if label[0] == 0:
+        dummy_zero = dummy_item_zero.to(device)
+
+        before_dummy_zero_loss, before_dummy_zero_recon = loss_recon_package(dummy_zero, net, mse_instead=USE_MSE_INSTEAD)
+        
+        break
+    
 
 for item, label in dataloader:
     print("loopinginging")
@@ -101,12 +110,15 @@ for item, label in dataloader:
 
         dummy_loss, dummy_recon = loss_recon_package(dummy, net, mse_instead=USE_MSE_INSTEAD)
 
+        dummy_zero_loss, dummy_zero_recon = loss_recon_package(dummy_zero, net, mse_instead=USE_MSE_INSTEAD)
+
         assert torch.ne(before_recon, after_recon).all()
 
 
         print(before_loss, after_loss)
         print(before_dummy_loss, dummy_loss)
-        grid = torchvision.utils.make_grid([item[0], before_recon[0], after_recon[0], dummy[0], before_dummy_recon[0], dummy_recon[0]], nrow=3).cpu().numpy()
+        print(before_dummy_zero_loss, dummy_zero_loss)
+        grid = torchvision.utils.make_grid([item[0], before_recon[0], after_recon[0], dummy[0], before_dummy_recon[0], dummy_recon[0], dummy_zero[0],before_dummy_zero_recon[0],dummy_zero_recon[0]], nrow=3).cpu().numpy()
         plt.imshow(np.transpose(grid, (1, 2, 0)))
         plt.show()
 

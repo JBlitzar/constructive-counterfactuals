@@ -5,7 +5,7 @@
 ### Part 1: Reproducing _Ablation Based Counterfactuals_
 
 Inspired by Zheng Dai and David Glifford's work with _Ablation Based Counterfactuals_ ([arXiv:2406.07908v1](https://arxiv.org/abs/2406.07908)), this repository presents some experiments and expansions.
-First, my aim was to reproduce their results. In order to encourage rapid experimentation and accessibility, I implemented the model as a VAE instead of a diffusion model. Additionally, rather than ablating by removing a model from an ensemble where each model was trained on a subset, I instead ablate simply by zeroing the parameters strongly activated by a specific sample: This allows these methods to be generalized to the most common architectures, rather than constructing an ensemble specificically for examining counterfactuals. (see [ablate.py](ablate.py) and [architecture.py](architecture.py))
+First, my aim was to reproduce their results. In order to encourage rapid experimentation and accessibility, I implemented the model as a VAE instead of a diffusion model. Additionally, rather than ablating by removing a model from an ensemble where each model was trained on a subset, I instead ablate simply by zeroing the parameters strongly activated by a specific sample: This allows these methods to be generalized to the most common architectures, rather than constructing an ensemble specifically for examining counterfactuals. (see [ablate.py](ablate.py) and [architecture.py](architecture.py))
 
 <img src="results/realistic_ablation.png" width="30%">
 
@@ -19,7 +19,7 @@ Results:
 
 ### Part 2: Teaching an old model new tricks: _Constructive Counterfactuals_
 
-Going further, I've began experimenting with a new method, dubbed _Constructive Counterfactuals_. This method draws off of ABCs, but presents the reverse: Instead of ablating a model to prevent it from learning from a specific piece of data, we can add new data into a model _without retraining_ by using gradient-based methods to manipulate the parameters. Preliminary results show that it's possible, at least for VAEs, to quickly generalize to a new form of data with a single reverse ablation step.
+Going further, I've begun experimenting with a new method, dubbed _Constructive Counterfactuals_. This method draws off of ABCs, but presents the reverse: Instead of ablating a model to prevent it from learning from a specific piece of data, we can add new data into a model _without retraining_ by using gradient-based methods to manipulate the parameters. Preliminary results show that it's possible, at least for VAEs, to quickly generalize to a new form of data with a single reverse ablation step.
 
 ---
 

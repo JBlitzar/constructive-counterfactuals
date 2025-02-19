@@ -53,6 +53,10 @@ Results:
 
 ---
 
+<img src="results/constructive_counterfactuals_result2.png" width="30%">
+
+Additional image.
+
 All code is available in this repository, and model weights are located at runs/vae_l5_linear_512_no0/ckpt/best.pt.
 
 You should be able to reproduce my results by running `constructive_counterfactuals.py`

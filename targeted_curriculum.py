@@ -5,7 +5,7 @@ from architecture import Simple_VAE
 from dataset import get_train_dataset, get_dataloader
 import numpy as np
 import matplotlib.pyplot as plt
-
+from tqdm import tqdm, trange
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 run = "runs/vae_l5_linear_512_no0"
@@ -49,14 +49,17 @@ def reverse_ablate(image, net,strength=0.001):
 def select_hard_samples(dataloader, net, threshold=0.01):
     hard_samples = []
     net.eval()
-    with torch.no_grad():
-        for image, _ in dataloader:
-            image = image.to(device)
-            before_loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
-            reverse_ablate(image, net)
-            after_loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
-            if (before_loss - after_loss).abs() < threshold:
-                hard_samples.append(image)
+    net.zero_grad()
+    for image, _ in tqdm(dataloader):
+        image = image.to(device)
+        net.zero_grad()
+        before_loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+        reverse_ablate(image, net)
+        after_loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+        if (before_loss - after_loss).abs() < threshold:
+            hard_samples.append(image)
+
+    net.zero_grad()
     return hard_samples
 
 

@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torchvision
 from architecture import Simple_VAE
-from dataset import get_train_dataset, get_dataloader
+from dataset import get_train_dataset, get_dataloader, get_test_dataset
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
@@ -14,7 +14,7 @@ net = Simple_VAE().to(device)
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
 
 USE_MSE_INSTEAD = True
-LEARNING_RATE = 1e-4
+LEARNING_RATE = 0.00001
 epochs = 5
 
 # Samples that are *only* 0: Model has never seen these before
@@ -46,7 +46,7 @@ def reverse_ablate(image, net,strength=0.001):
                 param.data = param - torch.sign(param.grad) * strength
 
 
-def select_hard_samples(dataloader, net, threshold=0.01):
+def select_hard_samples(dataloader, net, threshold=0.01, easy_instead=False):
     hard_samples = []
     net.eval()
     net.zero_grad()
@@ -56,25 +56,70 @@ def select_hard_samples(dataloader, net, threshold=0.01):
         before_loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
         reverse_ablate(image, net)
         after_loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
-        if (before_loss - after_loss).abs() < threshold:
-            hard_samples.append(image)
+        if easy_instead:
+            if (before_loss - after_loss).abs() > threshold:
+                hard_samples.append(image)
+        else:
+            if (before_loss - after_loss).abs() < threshold:
+                hard_samples.append(image)
 
     net.zero_grad()
     return hard_samples
 
 
-hard_samples = select_hard_samples(dataloader, net)
-print(f"Selected {len(hard_samples)} hard samples for fine-tuning")
+with torch.no_grad():
+    net.eval()
+    avg_loss = 0
+    for image, label in get_dataloader(get_test_dataset(), batch_size=1):
+        image = image.to(device)
+        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+        avg_loss += loss.item()
+        
+    print(f"Avg Loss on Test Set (before training): {avg_loss/len(get_test_dataset())}")
 
+    avg_loss = 0
+    for image, label in get_dataloader(get_test_dataset(invert_filter=True), batch_size=1):
+        image = image.to(device)
+        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+        avg_loss += loss.item()
+        
+    print(f"Avg Loss on Test Set (only 0): {avg_loss/len(get_test_dataset())}")
+
+
+easy = False
+hard_samples = select_hard_samples(dataloader, net, easy_instead=easy)
+print(f"Selected {len(hard_samples)} {'easy' if easy else 'hard'} samples for fine-tuning")
+
+net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True)) # haha
 
 net.train()
-for epoch in range(epochs):
+for epoch in trange(epochs):
     for image in hard_samples:
         optimizer.zero_grad()
         loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
         loss.backward()
         optimizer.step()
-    print(f"Epoch {epoch+1}/{epochs}, Loss: {loss.item()}")
+    #print(f"Epoch {epoch+1}/{epochs}, Loss: {loss.item()}")
 
 
 torch.save(net.state_dict(), f"{run}/ckpt/fine_tuned.pt")
+
+with torch.no_grad():
+    net.eval()
+    avg_loss = 0
+    for image, label in get_dataloader(get_test_dataset(), batch_size=1):
+        image = image.to(device)
+        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+        avg_loss += loss.item()
+        
+    print(f"Avg Loss on Test Set: {avg_loss/len(get_test_dataset())}")
+
+    avg_loss = 0
+    for image, label in get_dataloader(get_test_dataset(invert_filter=True), batch_size=1):
+        image = image.to(device)
+        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+        avg_loss += loss.item()
+        
+    print(f"Avg Loss on Test Set (only 0): {avg_loss/len(get_test_dataset())}")
+
+

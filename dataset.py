@@ -13,17 +13,22 @@ FILTER_ZERO = True
 N_TRAIN = 512
 
 
-def get_train_dataset(filter_override=False):
+def get_train_dataset(filter_override=False, invert_filter=False):
     dataset = dset.MNIST(
         root="./mnist",
         train=True,
         download=True,
         transform=transform_pipeline
     )
-
-    if FILTER_ZERO and not filter_override:
+    if invert_filter:
+        filtered_indices = [i for i, (_, target) in enumerate(dataset) if target == 0]
+        print("inverting!")
+        print(len(filtered_indices))
+        dataset = torch.utils.data.Subset(dataset, filtered_indices)
+    elif FILTER_ZERO and not filter_override:
         filtered_indices = [i for i, (_, target) in enumerate(dataset) if target != 0]
         dataset = torch.utils.data.Subset(dataset, filtered_indices)
+   
 
     if N_TRAIN is not None:
         indices = torch.randperm(len(dataset)).tolist() # shuffle first

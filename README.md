@@ -99,10 +99,10 @@ Results:
 
 - The model is able to learn from finetuned on data it hasn't seen before, improving its performance on new tasks without degrading its other knowledge. I posit that using Constructive Counterfactuals for Targeted Finetuning, we can finetune more efficiently by only using the most salient data.
 
-([selective_finetuning.py](selective_finetuning.py))
+([targeted_finetuning.py](targeted_finetuning.py))
 
 ---
 
 All code is available in this repository, and model weights are located at [runs/vae_l5_linear_512_no0/ckpt](runs/vae_l5_linear_512_no0/ckpt)
 
-You should be able to reproduce my results by running `constructive_counterfactuals.py` or `selective_finetuning.py`
+You should be able to reproduce my results by running `constructive_counterfactuals.py` or `targeted_finetuning.py`

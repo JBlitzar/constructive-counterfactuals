@@ -33,15 +33,17 @@ def get_loss(image, net, mse_instead=False):
         return net.loss_function(reconstructed, image, mean, logvar)
 
 
-def reverse_ablate(image, net, strength=0.001):
+def reverse_ablate(image, net,strength=0.001):
     net.eval()
     net.zero_grad()
+
     loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
     loss.backward()
+
     with torch.no_grad():
         for param in net.parameters():
             if param.grad is not None:
-                param.data -= torch.sign(param.grad) * strength
+                param.data = param - torch.sign(param.grad) * strength
 
 
 def select_hard_samples(dataloader, net, threshold=0.01):

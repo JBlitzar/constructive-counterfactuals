@@ -69,7 +69,7 @@ Additional image.
 
 Thank you to Zheng Dai for suggesting that I explore if Constructive Counterfactuals could be used to efficiently find good training sets to fine tune on.
 
-Conventional finetuning works really well, but it's inefficient. You end up training more than you, with redundencies in the original training data.
+Conventional finetuning works really well, but it's inefficient. You end up training more than you, with redundancies in the original training data.
 
 Constructive Counterfactuals can be used to identify which samples are the most important for model finetuning, so that you can finetune at a fraction of the computational cost.
 

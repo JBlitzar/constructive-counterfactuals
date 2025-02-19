@@ -75,7 +75,7 @@ Constructive Counterfactuals can be used to identify which samples are the most 
 
 Unlike other finetuning methods like selective finetuning, which freeze certain weights in the model, using Constructive Counterfactuals for Targeted Finetuning works across the entire model but only trains from a subset of the most important finetuning data.
 
-I implemented Constructive Counterfactuals for Targeted Finetuning by using the difference in reconstruction loss before and after reverse ablating as a heuristic for how easy it was for the model to learn from a given sample. From this, you can get the samples with a comparitively small loss difference: These were ones that the model had trouble learning from. The final step is to train on this smaller dataset, which allows for only the data that the model has not already learned from to be used, thus radically increasing efficiency.
+I implemented Constructive Counterfactuals for Targeted Finetuning by using the difference in reconstruction loss before and after reverse ablating as a heuristic for how easy it was for the model to learn from a given sample. From this, you can get the samples with a comparatively small loss difference: These were ones that the model had trouble learning from. The final step is to train on this smaller dataset, which allows for only the data that the model has not already learned from to be used, thus radically increasing efficiency.
 
 This approach is more nuanced than Hard Example Mining because it selects samples that have a small loss difference after applying Constructive Counterfactuals, rather than just selecting samples with a higher loss.
 

@@ -2,6 +2,12 @@
 
 ### By Jacob Buckhouse
 
+- [Part 1: Reproducing _Ablation Based Counterfactuals_](#part-1-reproducing-ablation-based-counterfactuals)
+
+- [Part 2: Teaching an old model new tricks: _Constructive Counterfactuals_](#part-2-teaching-an-old-model-new-tricks-constructive-counterfactuals)
+
+- [Part 3: Using Constructive Counterfactuals for Targeted Finetuning](#part-3-using-constructive-counterfactuals-for-targeted-finetuning)
+
 ### Part 1: Reproducing _Ablation Based Counterfactuals_
 
 Inspired by Zheng Dai and David Glifford's work with _Ablation Based Counterfactuals_ ([arXiv:2406.07908v1](https://arxiv.org/abs/2406.07908)), this repository presents some experiments and expansions.
@@ -57,6 +63,46 @@ Results:
 
 Additional image.
 
-All code is available in this repository, and model weights are located at runs/vae_l5_linear_512_no0/ckpt/best.pt.
+---
 
-You should be able to reproduce my results by running `constructive_counterfactuals.py`
+### Part 3: Using Constructive Counterfactuals for Targeted Finetuning
+
+Thank you to Zheng Dai for suggesting that I explore if Constructive Counterfactuals could be used to efficiently find good training sets to fine tune on.
+
+Conventional finetuning works really well, but it's inefficient. You end up training more than you, with redundencies in the original training data.
+
+Constructive Counterfactuals can be used to identify which samples are the most important for model finetuning, so that you can finetune at a fraction of the computational cost.
+
+Unlike other finetuning methods like selective finetuning, which freeze certain weights in the model, using Constructive Counterfactuals for Targeted Finetuning works across the entire model but only trains from a subset of the most important finetuning data.
+
+I implemented Constructive Counterfactuals for Targeted Finetuning by using the difference in reconstruction loss before and after reverse ablating as a heuristic for how easy it was for the model to learn from a given sample. From this, you can get the samples with a comparitively small loss difference: These were ones that the model had trouble learning from. The final step is to train on this smaller dataset, which allows for only the data that the model has not already learned from to be used, thus radically increasing efficiency.
+
+This approach is more nuanced than Hard Example Mining because it selects samples that have a small loss difference after applying Constructive Counterfactuals, rather than just selecting samples with a higher loss.
+
+In this case, I pretrained the VAE but initially excluded the digit 0 from the training set. Then, I used Targeted Finetuning to finetune on a subset of the new dataset (images of the digit 0)
+
+Here's what I found:
+
+```
+Before finetuning
+Avg Loss on Test Set (All digits): 0.02234510928246891
+Avg Loss on Test Set (only 0): 0.0405641535835457
+
+Selected 302 hard samples out of 512 for fine-tuning
+
+
+Avg Loss on Test Set (All digits): 0.022237611338141505
+Avg Loss on Test Set (only 0): 0.020719873944472056
+```
+
+Results:
+
+- The model is able to learn from finetuned on data it hasn't seen before, improving its performance on new tasks without degrading its other knowledge. I posit that using Constructive Counterfactuals for Targeted Finetuning, we can finetune more efficiently by only using the most salient data.
+
+([selective_finetuning.py](selective_finetuning.py))
+
+---
+
+All code is available in this repository, and model weights are located at [runs/vae_l5_linear_512_no0/ckpt](runs/vae_l5_linear_512_no0/ckpt)
+
+You should be able to reproduce my results by running `constructive_counterfactuals.py` or `selective_finetuning.py`

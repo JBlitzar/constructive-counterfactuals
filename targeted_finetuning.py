@@ -25,6 +25,8 @@ dataloader = get_dataloader(trainset, batch_size=1)
 optimizer = torch.optim.Adam(net.parameters(), lr=LEARNING_RATE)
 
 
+
+
 def get_loss(image, net, mse_instead=False):
     reconstructed, mean, logvar = net(image)
     if mse_instead:

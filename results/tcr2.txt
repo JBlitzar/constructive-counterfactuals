@@ -1,22 +1,25 @@
-python targeted_finetuning.py
-inverting!
-5923
-
-Before Fine-Tuning:
-Avg Loss on Test Set: 0.02191034297038641
-FID on Test Set: 50.21699523925781
+Avg Loss on Test Set: 0.021949582184561223
+FID on Test Set: 49.294952392578125
 inverting!
 980
-Avg Loss on Test (only 0) Set: 0.040822262068104465
-FID on Test (only 0) Set: 91.32998657226562
-100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 512/512 [00:04<00:00, 118.81it/s]
-Selected 293 hard samples for fine-tuning
-100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:07<00:00,  1.56s/it]
+initted
+updating...
+updated. computing...
+Avg Loss on Test (only 0) Set: 0.04023435823910404
+FID on Test (only 0) Set: 91.77238464355469
+
+Selected 287 hard samples for fine-tuning
 
 After Fine-Tuning:
-Avg Loss on Test Set: 0.022880875305418158
-FID on Test Set: 48.97796630859375
+initted
+updating...
+updated. computing...
+Avg Loss on Test Set: 0.021675188416338642
+FID on Test Set: 47.837493896484375
 inverting!
 980
-Avg Loss on Test (only 0) Set: 0.02160142171487678
-FID on Test (only 0) Set: 44.979888916015625
+initted
+updating...
+updated. computing...
+Avg Loss on Test (only 0) Set: 0.021208593271694554
+FID on Test (only 0) Set: 41.784637451171875

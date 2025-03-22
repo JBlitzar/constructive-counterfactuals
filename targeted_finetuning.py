@@ -1,3 +1,4 @@
+from fid_metric import compute_fid # import first to set the environment variable for MPS fallback!
 import torch
 import torch.nn as nn
 import torchvision
@@ -6,7 +7,6 @@ from dataset import get_train_dataset, get_dataloader, get_test_dataset
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
-from fid_metric import compute_fid
 
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 

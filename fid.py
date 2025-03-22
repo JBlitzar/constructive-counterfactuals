@@ -1,44 +1,28 @@
-import numpy as np
-from PIL import Image
-from scipy.linalg import sqrtm
-from torchvision import transforms
 import torch
-from torchvision.models import inception_v3
 from torcheval.metrics import FrechetInceptionDistance
 
-def preprocess_image(image):
-    """Preprocess image to ensure it is 3-channel and 224x224."""
-    if len(image.shape) == 2 or image.shape[2] == 1:  # Grayscale or single channel
-        image = np.repeat(image, 3, axis=-1)
-    image = Image.fromarray(image)
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    ])
-    return transform(image).unsqueeze(0)
-
-def calculate_fid(image1, image2):
-    """Calculate FID between two images using torcheval."""
-    # Preprocess images
-    image1 = preprocess_image(image1)
-    image2 = preprocess_image(image2)
-
+def compute_fid(images1, images2):
     
+    if images1.shape != images2.shape:
+        raise ValueError("Both image tensors must have the same shape.")
+    
+    if images1.ndim != 4 or images2.ndim != 4:
+        raise ValueError("Both image tensors must be 4D (batch_size, channels, height, width).")
 
-    # Initialize FID metric
-    fid_metric = FrechetInceptionDistance(feature_dim=2048)
-    fid_metric.update(image1, is_real=True)
-    fid_metric.update(image2, is_real=False)
+    fid_metric = FrechetInceptionDistance(device="cpu") # NotImplementedError: The operator 'aten::_linalg_eigvals' is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on https://github.com/pytorch/pytorch/issues/77764. As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS.
+    
+    images1 = images1.clip(0, 1).to("cpu")
+    images2 = images2.clip(0, 1).to("cpu")
 
-    # Compute FID
-    fid = fid_metric.compute().item()
-    return fid
+    fid_metric.update(images1, is_real=True)
+    fid_metric.update(images2, is_real=False)
+
+    return fid_metric.compute().item()
+
 
 if __name__ == "__main__":
-    # Example usage
-    image1 = np.random.rand(224, 224, 3) * 255  # Replace with your actual image
-    image2 = np.random.rand(224, 224, 3) * 255  # Replace with your actual image
+    real_images = torch.rand(16, 3, 64, 64)
+    generated_images = torch.rand(16, 3, 64, 64)
 
-    fid_value = calculate_fid(image1.astype(np.uint8), image2.astype(np.uint8))
-    print(f"FID between the two images: {fid_value}")
+    fid_score = compute_fid(real_images, generated_images)
+    print(f"FID Score: {fid_score}")

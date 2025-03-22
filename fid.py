@@ -4,6 +4,7 @@ from scipy.linalg import sqrtm
 from torchvision import transforms
 import torch
 from torchvision.models import inception_v3
+from torcheval.metrics import FrechetInceptionDistance
 
 def preprocess_image(image):
     """Preprocess image to ensure it is 3-channel and 224x224."""
@@ -18,30 +19,26 @@ def preprocess_image(image):
     return transform(image).unsqueeze(0)
 
 def calculate_fid(image1, image2):
-    """Calculate FID between two images."""
-    # Load InceptionV3 model
-    model = inception_v3(pretrained=True, transform_input=False)
-    model.fc = torch.nn.Identity()  # Remove final classification layer
-    model.eval()
-
+    """Calculate FID between two images using torcheval."""
     # Preprocess images
     image1 = preprocess_image(image1)
     image2 = preprocess_image(image2)
 
-    # Extract features
-    with torch.no_grad():
-        features1 = model(image1).numpy().squeeze()
-        features2 = model(image2).numpy().squeeze()
+    
 
-    # Calculate mean and covariance
-    mu1, sigma1 = np.mean(features1, axis=0), np.cov(features1, rowvar=False)
-    mu2, sigma2 = np.mean(features2, axis=0), np.cov(features2, rowvar=False)
+    # Initialize FID metric
+    fid_metric = FrechetInceptionDistance(feature_dim=2048)
+    fid_metric.update(image1, is_real=True)
+    fid_metric.update(image2, is_real=False)
 
-    # Calculate FID
-    diff = mu1 - mu2
-    covmean = sqrtm(sigma1.dot(sigma2))
-    if np.iscomplexobj(covmean):
-        covmean = covmean.real
-
-    fid = diff.dot(diff) + np.trace(sigma1 + sigma2 - 2 * covmean)
+    # Compute FID
+    fid = fid_metric.compute().item()
     return fid
+
+if __name__ == "__main__":
+    # Example usage
+    image1 = np.random.rand(224, 224, 3) * 255  # Replace with your actual image
+    image2 = np.random.rand(224, 224, 3) * 255  # Replace with your actual image
+
+    fid_value = calculate_fid(image1.astype(np.uint8), image2.astype(np.uint8))
+    print(f"FID between the two images: {fid_value}")

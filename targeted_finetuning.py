@@ -6,6 +6,8 @@ from dataset import get_train_dataset, get_dataloader, get_test_dataset
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
+from fid_metric import compute_fid
+
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 run = "runs/vae_l5_linear_512_no0"
@@ -17,14 +19,10 @@ USE_MSE_INSTEAD = True
 LEARNING_RATE = 0.00001
 epochs = 5
 
-# Samples that are *only* 0: Model has never seen these before
-# The goal is to fine-tune the model on these samples without using all of them: performing a single FGSM step to identify hard ones, then training on just those.
 trainset = get_train_dataset(invert_filter=True)
 dataloader = get_dataloader(trainset, batch_size=1)
 
 optimizer = torch.optim.Adam(net.parameters(), lr=LEARNING_RATE)
-
-
 
 
 def get_loss(image, net, mse_instead=False):
@@ -35,7 +33,7 @@ def get_loss(image, net, mse_instead=False):
         return net.loss_function(reconstructed, image, mean, logvar)
 
 
-def reverse_ablate(image, net,strength=0.001):
+def reverse_ablate(image, net, strength=0.001):
     net.eval()
     net.zero_grad()
 
@@ -69,30 +67,43 @@ def select_hard_samples(dataloader, net, threshold=0.01, easy_instead=False):
     return hard_samples
 
 
-with torch.no_grad():
-    net.eval()
-    avg_loss = 0
-    for image, label in get_dataloader(get_test_dataset(), batch_size=1):
-        image = image.to(device)
-        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
-        avg_loss += loss.item()
-        
-    print(f"Avg Loss on Test Set (before training): {avg_loss/len(get_test_dataset())}")
+def evaluate_model(net, dataset, label=""):
 
-    avg_loss = 0
-    for image, label in get_dataloader(get_test_dataset(invert_filter=True), batch_size=1):
-        image = image.to(device)
-        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
-        avg_loss += loss.item()
-        
-    print(f"Avg Loss on Test Set (only 0): {avg_loss/len(get_test_dataset())}")
+    with torch.no_grad():
+        net.eval()
+        avg_loss = 0
+        real_images, generated_images = [], []
 
+        for image, _ in get_dataloader(dataset, batch_size=1):
+            image = image.to(device)
+            loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+            avg_loss += loss.item()
+
+            reconstructed, _, _ = net(image)
+            real_images.append(image.cpu())
+            generated_images.append(reconstructed.cpu())
+
+        avg_loss /= len(dataset)
+        real_images = torch.cat(real_images, dim=0).repeat(1, 3, 1, 1)
+        generated_images = torch.cat(generated_images, dim=0).repeat(1, 3, 1, 1)
+        
+        fid_score = compute_fid(real_images, generated_images)
+
+        print(f"Avg Loss on {label} Set: {avg_loss}")
+        print(f"FID on {label} Set: {fid_score}")
+        return avg_loss, fid_score
+
+
+print("\nBefore Fine-Tuning:")
+loss_test, fid_test = evaluate_model(net, get_test_dataset(), "Test")
+loss_test_zero, fid_test_zero = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
 
 easy = False
 hard_samples = select_hard_samples(dataloader, net, easy_instead=easy)
 print(f"Selected {len(hard_samples)} {'easy' if easy else 'hard'} samples for fine-tuning")
 
-net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True)) # haha
+net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
+
 
 net.train()
 for epoch in trange(epochs):
@@ -101,27 +112,10 @@ for epoch in trange(epochs):
         loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
         loss.backward()
         optimizer.step()
-    #print(f"Epoch {epoch+1}/{epochs}, Loss: {loss.item()}")
-
 
 torch.save(net.state_dict(), f"{run}/ckpt/fine_tuned.pt")
 
-with torch.no_grad():
-    net.eval()
-    avg_loss = 0
-    for image, label in get_dataloader(get_test_dataset(), batch_size=1):
-        image = image.to(device)
-        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
-        avg_loss += loss.item()
-        
-    print(f"Avg Loss on Test Set: {avg_loss/len(get_test_dataset())}")
-
-    avg_loss = 0
-    for image, label in get_dataloader(get_test_dataset(invert_filter=True), batch_size=1):
-        image = image.to(device)
-        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
-        avg_loss += loss.item()
-        
-    print(f"Avg Loss on Test Set (only 0): {avg_loss/len(get_test_dataset())}")
-
-
+# **After Training Metrics**
+print("\nAfter Fine-Tuning:")
+loss_test_after, fid_test_after = evaluate_model(net, get_test_dataset(), "Test")
+loss_test_zero_after, fid_test_zero_after = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")

@@ -50,7 +50,7 @@ def select_hard_samples(dataloader, net, threshold=0.01, easy_instead=False):
     hard_samples = []
     net.eval()
     net.zero_grad()
-    for image, _ in tqdm(dataloader):
+    for image, _ in tqdm(dataloader, leave=False):
         image = image.to(device)
         net.zero_grad()
         before_loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
@@ -106,7 +106,7 @@ net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
 
 
 net.train()
-for epoch in trange(epochs):
+for epoch in trange(epochs, leave=False):
     for image in hard_samples:
         optimizer.zero_grad()
         loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
@@ -119,3 +119,22 @@ torch.save(net.state_dict(), f"{run}/ckpt/fine_tuned.pt")
 print("\nAfter Fine-Tuning:")
 loss_test_after, fid_test_after = evaluate_model(net, get_test_dataset(), "Test")
 loss_test_zero_after, fid_test_zero_after = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+
+
+print("Finetuning on full dataset...")
+net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
+
+
+net.train()
+for epoch in trange(epochs, leave=False):
+    for image, _ in dataloader:
+        image = image.to(device)
+        optimizer.zero_grad()
+        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+        loss.backward()
+        optimizer.step()
+
+print("\nAfter Fine-Tuning on Full Dataset:")
+loss_test_full, fid_test_full = evaluate_model(net, get_test_dataset(), "Test")
+loss_test_zero_full, fid_test_zero_full = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+

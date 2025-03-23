@@ -22,8 +22,8 @@ def get_train_dataset(filter_override=False, invert_filter=False):
     )
     if invert_filter:
         filtered_indices = [i for i, (_, target) in enumerate(dataset) if target == 0]
-        print("inverting!")
-        print(len(filtered_indices))
+        #print("inverting!")
+        #print(len(filtered_indices))
         dataset = torch.utils.data.Subset(dataset, filtered_indices)
     elif FILTER_ZERO and not filter_override:
         filtered_indices = [i for i, (_, target) in enumerate(dataset) if target != 0]
@@ -47,8 +47,8 @@ def get_test_dataset(filter_override=False, invert_filter=False):
     )
     if invert_filter:
         filtered_indices = [i for i, (_, target) in enumerate(dataset) if target == 0]
-        print("inverting!")
-        print(len(filtered_indices))
+        #print("inverting!")
+        #print(len(filtered_indices))
         dataset = torch.utils.data.Subset(dataset, filtered_indices)
     elif FILTER_ZERO and not filter_override:
         filtered_indices = [i for i, (_, target) in enumerate(dataset) if target != 0]

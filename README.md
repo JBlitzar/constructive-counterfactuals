@@ -101,6 +101,33 @@ Results:
 
 ([targeted_finetuning.py](targeted_finetuning.py))
 
+Next, I improved upon this by adding FID between generated images and real images as a secondary metric. Here are the results:
+
+```
+Avg Loss on Test Set: 0.022117083728517173
+FID on Test Set: 49.465606689453125
+Avg Loss on Test (only 0) Set: 0.04029097671445925
+FID on Test (only 0) Set: 90.47225952148438
+
+Selected 287 hard samples for fine-tuning
+After Fine-Tuning:
+Avg Loss on Test Set: 0.022079628355868408
+FID on Test Set: 46.07502746582031
+Avg Loss on Test (only 0) Set: 0.020649259990022983
+FID on Test (only 0) Set: 41.02202606201172
+
+Finetuning on full dataset (512 samples)...
+After Fine-Tuning on Full Dataset:
+Avg Loss on Test Set: 0.022595768311020947
+FID on Test Set: 48.40647888183594
+Avg Loss on Test (only 0) Set: 0.0183276021052734
+FID on Test (only 0) Set: 39.96887969970703
+```
+
+What's interesting is that this shows that using Constructive Counterfactuals for Targeted Finetuning not only significantly decreases FID on the new finetuning set (Test only 0. Drops from 90 to 41), but improvement is also seen on the previous dataset. In fact, the Targeted Finetuning shows greater retention of knowledge from the original dataset (46 vs. 48) without compromising FID on the new finetuning dataset (41 to 39). Furthermore, all of this is done with a fraction of the computing power, since only a subset of samples are selected for training with Targeted Finetuning.
+
+Constructive Counterfactuals for Targeted Finetuning works for any situation in which the finetuning set is disjoint from the training set, but I could see it being particularly helpful for domain generalization with adaptation, in which it's advantageous to retain both the previous knowledge and the new fine-tuned data.
+
 ---
 
 All code is available in this repository, and model weights are located at [runs/vae_l5_linear_512_no0/ckpt](runs/vae_l5_linear_512_no0/ckpt)

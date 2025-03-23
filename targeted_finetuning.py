@@ -121,7 +121,7 @@ loss_test_after, fid_test_after = evaluate_model(net, get_test_dataset(), "Test"
 loss_test_zero_after, fid_test_zero_after = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
 
 
-print("Finetuning on full dataset...")
+print(f"Finetuning on full dataset ({len(dataloader.dataset)} samples)...")
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
 
 

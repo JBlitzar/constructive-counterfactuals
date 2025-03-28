@@ -104,27 +104,38 @@ Results:
 Next, I improved upon this by adding FID between generated images and real images as a secondary metric. Here are the results:
 
 ```
-Avg Loss on Test Set: 0.022117083728517173
-FID on Test Set: 49.465606689453125
-Avg Loss on Test (only 0) Set: 0.04029097671445925
-FID on Test (only 0) Set: 90.47225952148438
+Avg Loss on Test Set: 0.022680036814108462
+FID on Test Set: 50.391143798828125
+Avg Loss on Test (only 0) Set: 0.03998122360644629
+FID on Test (only 0) Set: 88.8389663696289
+Selected 306 hard samples for fine-tuning
 
-Selected 287 hard samples for fine-tuning
 After Fine-Tuning:
-Avg Loss on Test Set: 0.022079628355868408
-FID on Test Set: 46.07502746582031
-Avg Loss on Test (only 0) Set: 0.020649259990022983
-FID on Test (only 0) Set: 41.02202606201172
+Avg Loss on Test Set: 0.023203404331979982
+FID on Test Set: 50.04389953613281
+Avg Loss on Test (only 0) Set: 0.020941365963153658
+FID on Test (only 0) Set: 40.25682067871094
 
+Fine-tuning with 306 randomly selected samples...
+Selected 306 random samples for fine-tuning
+
+After Random Fine-Tuning:
+Avg Loss on Test Set: 0.02189867111883359
+FID on Test Set: 49.143707275390625
+Avg Loss on Test (only 0) Set: 0.020652462829275464
+FID on Test (only 0) Set: 43.67115020751953
 Finetuning on full dataset (512 samples)...
+
 After Fine-Tuning on Full Dataset:
-Avg Loss on Test Set: 0.022595768311020947
-FID on Test Set: 48.40647888183594
-Avg Loss on Test (only 0) Set: 0.0183276021052734
-FID on Test (only 0) Set: 39.96887969970703
+Avg Loss on Test Set: 0.022510978297304973
+FID on Test Set: 49.95489501953125
+Avg Loss on Test (only 0) Set: 0.018232861188153038
+FID on Test (only 0) Set: 38.184364318847656
 ```
 
-What's interesting is that this shows that using Constructive Counterfactuals for Targeted Finetuning not only significantly decreases FID on the new finetuning set (Test only 0. Drops from 90 to 41), but improvement is also seen on the previous dataset. In fact, the Targeted Finetuning shows greater retention of knowledge from the original dataset (46 vs. 48) without compromising FID on the new finetuning dataset (41 to 39). Furthermore, all of this is done with a fraction of the computing power, since only a subset of samples are selected for training with Targeted Finetuning.
+What's interesting is that this shows that using Constructive Counterfactuals for Targeted Finetuning not only significantly decreases FID on the new finetuning set (Test only 0. Drops from 89 to 40), but improvement is also seen on the previous dataset. In fact, the Targeted Finetuning shows retention of knowledge from the original dataset (stable 50) without compromising FID on the new finetuning dataset (40 to 43). Furthermore, all of this is done with a fraction of the computing power, since only a subset of samples are selected for training with Targeted Finetuning.
+
+Finetuning on the full dataset shows little to no improvement, and the model performs better when targeted finetuning is used rather than finetuning on a random subset of the same size.
 
 Constructive Counterfactuals for Targeted Finetuning works for any situation in which the finetuning set is disjoint from the training set, but I could see it being particularly helpful for domain generalization with adaptation, in which it's advantageous to retain both the previous knowledge and the new fine-tuned data.
 

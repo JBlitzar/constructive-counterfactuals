@@ -1,0 +1,27 @@
+Avg Loss on Test Set: 0.022680036814108462
+FID on Test Set: 50.391143798828125
+Avg Loss on Test (only 0) Set: 0.03998122360644629
+FID on Test (only 0) Set: 88.8389663696289
+Selected 306 hard samples for fine-tuning                                                                                                                                                             
+                                                                                                                                                                                                      
+After Fine-Tuning:
+Avg Loss on Test Set: 0.023203404331979982
+FID on Test Set: 50.04389953613281
+Avg Loss on Test (only 0) Set: 0.020941365963153658
+FID on Test (only 0) Set: 40.25682067871094
+
+Fine-tuning with 306 randomly selected samples...
+Selected 306 random samples for fine-tuning                                                                                                                                                           
+                                                                                                                                                                                                      
+After Random Fine-Tuning:
+Avg Loss on Test Set: 0.02189867111883359
+FID on Test Set: 49.143707275390625
+Avg Loss on Test (only 0) Set: 0.020652462829275464
+FID on Test (only 0) Set: 43.67115020751953
+Finetuning on full dataset (512 samples)...
+                                                                                                                                                                                                      
+After Fine-Tuning on Full Dataset:
+Avg Loss on Test Set: 0.022510978297304973
+FID on Test Set: 49.95489501953125
+Avg Loss on Test (only 0) Set: 0.018232861188153038
+FID on Test (only 0) Set: 38.184364318847656

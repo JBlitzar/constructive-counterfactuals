@@ -115,10 +115,44 @@ for epoch in trange(epochs, leave=False):
 
 torch.save(net.state_dict(), f"{run}/ckpt/fine_tuned.pt")
 
-# **After Training Metrics**
+
 print("\nAfter Fine-Tuning:")
 loss_test_after, fid_test_after = evaluate_model(net, get_test_dataset(), "Test")
 loss_test_zero_after, fid_test_zero_after = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+
+def select_random_samples(dataloader, num_samples):
+    all_samples = []
+    for image, _ in tqdm(dataloader, leave=False):
+        all_samples.append(image.to(device))
+    
+    if num_samples >= len(all_samples):
+        return all_samples
+    
+    indices = np.random.choice(len(all_samples), num_samples, replace=False)
+    return [all_samples[i] for i in indices]
+
+
+print(f"\nFine-tuning with {len(hard_samples)} randomly selected samples...")
+net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
+
+random_samples = select_random_samples(dataloader, len(hard_samples))
+print(f"Selected {len(random_samples)} random samples for fine-tuning")
+
+net.train()
+for epoch in trange(epochs, leave=False):
+    for image in random_samples:
+        optimizer.zero_grad()
+        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+        loss.backward()
+        optimizer.step()
+
+torch.save(net.state_dict(), f"{run}/ckpt/random_fine_tuned.pt")
+
+# After Random Fine-Tuning Metrics
+print("\nAfter Random Fine-Tuning:")
+loss_test_random, fid_test_random = evaluate_model(net, get_test_dataset(), "Test")
+loss_test_zero_random, fid_test_zero_random = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+
 
 
 print(f"Finetuning on full dataset ({len(dataloader.dataset)} samples)...")

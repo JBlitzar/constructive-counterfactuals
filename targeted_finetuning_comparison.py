@@ -66,6 +66,36 @@ def select_hard_samples(dataloader, net, threshold=0.01, easy_instead=False):
     net.zero_grad()
     return hard_samples
 
+def select_hard_samples_by_target(dataloader, net, target_percentile=0.5, easy_instead=False):
+    hard_samples = []
+    all_samples = []
+    loss_diffs = []
+    net.eval()
+    net.zero_grad()
+    for image, _ in tqdm(dataloader, leave=False):
+        image = image.to(device)
+        net.zero_grad()
+        before_loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+        reverse_ablate(image, net)
+        after_loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+        loss_diff = (before_loss - after_loss).abs()
+        all_samples.append(image)
+        loss_diffs.append(loss_diff.item())
+    
+    loss_diffs = np.array(loss_diffs)
+    threshold = np.percentile(loss_diffs, target_percentile * 100)
+    for i, image in enumerate(all_samples):
+        if easy_instead:
+            if loss_diffs[i] > threshold:
+                hard_samples.append(image)
+        else:
+            if loss_diffs[i] < threshold:
+                hard_samples.append(image)
+    hard_samples = torch.stack(hard_samples).to(device)
+    del all_samples, loss_diffs
+
+    net.zero_grad()
+    return hard_samples
 
 
 def evaluate_model(net, dataset, label=""):
@@ -99,27 +129,55 @@ print("\nBefore Fine-Tuning:")
 loss_test, fid_test = evaluate_model(net, get_test_dataset(), "Test")
 loss_test_zero, fid_test_zero = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
 
-easy = False
-hard_samples = select_hard_samples(dataloader, net, easy_instead=easy)
-print(f"Selected {len(hard_samples)} {'easy' if easy else 'hard'} samples for fine-tuning")
+import matplotlib.pyplot as plt
 
-net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
+percentiles = [0.1, 0.25, 0.5, 0.75, 0.9]
+losses_after, fids_after, losses_zero_after, fids_zero_after = [], [], [], []
 
+for perc in percentiles:
+    print(f"\nFine-tuning with target percentile {perc}...")
+    hard_samples = select_hard_samples_by_target(dataloader, net, target_percentile=perc, easy_instead=False)
+    print(f"Selected {len(hard_samples)} hard samples for fine-tuning at percentile {perc}")
 
-net.train()
-for epoch in trange(epochs, leave=False):
-    for image in hard_samples:
-        optimizer.zero_grad()
-        loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
-        loss.backward()
-        optimizer.step()
+    net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
+    net.train()
+    for epoch in trange(epochs, leave=False):
+        for image in hard_samples:
+            optimizer.zero_grad()
+            loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+            loss.backward()
+            optimizer.step()
 
-torch.save(net.state_dict(), f"{run}/ckpt/fine_tuned.pt")
+    # torch.save(net.state_dict(), f"{run}/ckpt/fine_tuned_{int(perc*100)}.pt")
 
+    print("\nAfter Fine-Tuning:")
+    loss_test_after, fid_test_after = evaluate_model(net, get_test_dataset(), "Test")
+    loss_test_zero_after, fid_test_zero_after = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
 
-print("\nAfter Fine-Tuning:")
-loss_test_after, fid_test_after = evaluate_model(net, get_test_dataset(), "Test")
-loss_test_zero_after, fid_test_zero_after = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+    losses_after.append(loss_test_after)
+    fids_after.append(fid_test_after)
+    losses_zero_after.append(loss_test_zero_after)
+    fids_zero_after.append(fid_test_zero_after)
+
+# Print results
+print("\nPercentiles:", percentiles)
+print("Loss after:", losses_after)
+print("FID after:", fids_after)
+print("Loss 0 after:", losses_zero_after)
+print("FID 0 after:", fids_zero_after)
+
+# Plotting
+plt.figure(figsize=(10, 6))
+plt.plot(percentiles, losses_after, marker='o', label='Loss (Test)')
+plt.plot(percentiles, fids_after, marker='o', label='FID (Test)')
+plt.plot(percentiles, losses_zero_after, marker='o', label='Loss (Test only 0)')
+plt.plot(percentiles, fids_zero_after, marker='o', label='FID (Test only 0)')
+plt.xlabel('Target Percentile')
+plt.ylabel('Metric Value')
+plt.title('Fine-tuning Metrics vs. Target Percentile')
+plt.legend()
+plt.grid(True)
+plt.show()
 
 def select_random_samples(dataloader, num_samples):
     all_samples = []

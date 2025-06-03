@@ -192,6 +192,16 @@ plt.show()
 
 # Random selection comparison
 print("\nPerforming random selection comparison...")
+def select_random_samples(dataloader, num_samples):
+    all_samples = []
+    for image, _ in tqdm(dataloader, leave=False):
+        all_samples.append(image.to(device))
+    
+    if num_samples >= len(all_samples):
+        return all_samples
+    
+    indices = np.random.choice(len(all_samples), num_samples, replace=False)
+    return [all_samples[i] for i in indices]
 losses_random, fids_random, losses_zero_random, fids_zero_random = [], [], [], []
 
 for perc in percentiles:
@@ -246,16 +256,7 @@ plt.grid(True)
 plt.savefig('results/comparison_fid_vs_percentile.png')
 plt.show()
 
-def select_random_samples(dataloader, num_samples):
-    all_samples = []
-    for image, _ in tqdm(dataloader, leave=False):
-        all_samples.append(image.to(device))
-    
-    if num_samples >= len(all_samples):
-        return all_samples
-    
-    indices = np.random.choice(len(all_samples), num_samples, replace=False)
-    return [all_samples[i] for i in indices]
+
 
 
 print(f"\nFine-tuning with {len(hard_samples)} randomly selected samples...")

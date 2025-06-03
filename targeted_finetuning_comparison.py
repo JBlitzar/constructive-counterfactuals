@@ -175,6 +175,7 @@ plt.ylabel('Loss')
 plt.title('Fine-tuning Loss vs. Target Percentile')
 plt.legend()
 plt.grid(True)
+plt.savefig('results/finetuning_loss_vs_percentile.png')
 plt.show()
 
 # Plotting FID
@@ -186,6 +187,7 @@ plt.ylabel('FID')
 plt.title('Fine-tuning FID vs. Target Percentile')
 plt.legend()
 plt.grid(True)
+plt.savefig('results/finetuning_fid_vs_percentile.png')
 plt.show()
 
 # Random selection comparison
@@ -227,6 +229,7 @@ plt.ylabel('Loss')
 plt.title('Fine-tuning Loss: Targeted vs Random Selection')
 plt.legend()
 plt.grid(True)
+plt.savefig('results/comparison_loss_vs_percentile.png')
 plt.show()
 
 # Plotting FID with Random comparison
@@ -240,6 +243,7 @@ plt.ylabel('FID')
 plt.title('Fine-tuning FID: Targeted vs Random Selection')
 plt.legend()
 plt.grid(True)
+plt.savefig('results/comparison_fid_vs_percentile.png')
 plt.show()
 
 def select_random_samples(dataloader, num_samples):

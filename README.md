@@ -139,6 +139,13 @@ Finetuning on the full dataset shows little to no improvement, and the model per
 
 Constructive Counterfactuals for Targeted Finetuning works for any situation in which the finetuning set is disjoint from the training set, but I could see it being particularly helpful for domain generalization with adaptation, in which it's advantageous to retain both the previous knowledge and the new fine-tuned data.
 
+While this feels promising, it needs a bit more evidence to convincingly show that it's not statistical noise. I investigated the tradeoff between amount of finetuning data kept and FID / Loss. Here's the results:
+
+<div style="display: flex; gap: 10px;">
+  <img src="results/finetuning_fid_vs_percentile.png" alt="FID vs Percentile" style="width: 49%;">
+  <img src="results/finetuning_loss_vs_percentile.png" alt="Loss vs Percentile" style="width: 49%;">
+</div>
+
 ---
 
 All code is available in this repository, and model weights are located at [runs/vae_l5_linear_512_no0/ckpt](runs/vae_l5_linear_512_no0/ckpt)

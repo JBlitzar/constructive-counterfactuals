@@ -131,7 +131,8 @@ loss_test_zero, fid_test_zero = evaluate_model(net, get_test_dataset(invert_filt
 
 import matplotlib.pyplot as plt
 
-percentiles = [0.1, 0.25, 0.5, 0.75, 0.9]
+percentiles = np.arange(0.1, 1, 0.1).tolist()
+print(percentiles)
 losses_after, fids_after, losses_zero_after, fids_zero_after = [], [], [], []
 
 for perc in percentiles:
@@ -165,16 +166,24 @@ print("Loss after:", losses_after)
 print("FID after:", fids_after)
 print("Loss 0 after:", losses_zero_after)
 print("FID 0 after:", fids_zero_after)
-
-# Plotting
-plt.figure(figsize=(10, 6))
+# Plotting Loss
+plt.figure(figsize=(10, 5))
 plt.plot(percentiles, losses_after, marker='o', label='Loss (Test)')
-plt.plot(percentiles, fids_after, marker='o', label='FID (Test)')
 plt.plot(percentiles, losses_zero_after, marker='o', label='Loss (Test only 0)')
+plt.xlabel('Target Percentile')
+plt.ylabel('Loss')
+plt.title('Fine-tuning Loss vs. Target Percentile')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Plotting FID
+plt.figure(figsize=(10, 5))
+plt.plot(percentiles, fids_after, marker='o', label='FID (Test)')
 plt.plot(percentiles, fids_zero_after, marker='o', label='FID (Test only 0)')
 plt.xlabel('Target Percentile')
-plt.ylabel('Metric Value')
-plt.title('Fine-tuning Metrics vs. Target Percentile')
+plt.ylabel('FID')
+plt.title('Fine-tuning FID vs. Target Percentile')
 plt.legend()
 plt.grid(True)
 plt.show()

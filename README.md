@@ -139,12 +139,21 @@ Finetuning on the full dataset shows little to no improvement, and the model per
 
 Constructive Counterfactuals for Targeted Finetuning works for any situation in which the finetuning set is disjoint from the training set, but I could see it being particularly helpful for domain generalization with adaptation, in which it's advantageous to retain both the previous knowledge and the new fine-tuned data.
 
-While this feels promising, it needs a bit more evidence to convincingly show that it's not statistical noise. I investigated the tradeoff between amount of finetuning data kept and FID / Loss. Here's the results:
+While this feels promising, it needs a bit more evidence to convincingly show that it's not statistical noise. I investigated the tradeoff between amount of finetuning data kept and FID / Loss. Here's the results. I also included when selecting the same amount from the test set randomly.
 
-<div style="display: flex; gap: 10px;">
+<!-- <div style="display: flex; gap: 10px;">
   <img src="results/finetuning_fid_vs_percentile.png" alt="FID vs Percentile" style="width: 49%;">
   <img src="results/finetuning_loss_vs_percentile.png" alt="Loss vs Percentile" style="width: 49%;">
+</div> -->
+
+<!-- And here are the results for selecting the same amount randomly: -->
+
+<div style="display: flex; gap: 10px;">
+  <img src="results/comparison_fid_vs_percentile.png" alt="FID vs Percentile" style="width: 49%;">
+  <img src="results/comparison_loss_vs_percentile.png" alt="Loss vs Percentile" style="width: 49%;">
 </div>
+
+Of course, there's more of a curve with the "only 0" data rather than normal test data because that's what the model's learning from. All of the loss comparisons seem similar, but with FID, constructive counterfactuals seems to consistently outperform random selection, with the most notable discrepancy at the 0.4 threshold, with more at 0.7 and 0.9. This is great! A new insight.
 
 ---
 

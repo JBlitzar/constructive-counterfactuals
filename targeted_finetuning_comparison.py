@@ -188,6 +188,60 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
+# Random selection comparison
+print("\nPerforming random selection comparison...")
+losses_random, fids_random, losses_zero_random, fids_zero_random = [], [], [], []
+
+for perc in percentiles:
+    print(f"\nFine-tuning with random {perc} proportion...")
+    num_samples = int(len(dataloader.dataset) * perc)
+    random_samples = select_random_samples(dataloader, num_samples)
+    print(f"Selected {len(random_samples)} random samples for fine-tuning")
+
+    net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
+    net.train()
+    for epoch in trange(epochs, leave=False):
+        for image in random_samples:
+            optimizer.zero_grad()
+            loss = get_loss(image, net, mse_instead=USE_MSE_INSTEAD)
+            loss.backward()
+            optimizer.step()
+
+    print("\nAfter Random Fine-Tuning:")
+    loss_test_after, fid_test_after = evaluate_model(net, get_test_dataset(), "Test")
+    loss_test_zero_after, fid_test_zero_after = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+
+    losses_random.append(loss_test_after)
+    fids_random.append(fid_test_after)
+    losses_zero_random.append(loss_test_zero_after)
+    fids_zero_random.append(fid_test_zero_after)
+
+# Plotting Loss with Random comparison
+plt.figure(figsize=(10, 5))
+plt.plot(percentiles, losses_after, marker='o', label='Loss (Test) - Targeted')
+plt.plot(percentiles, losses_zero_after, marker='o', label='Loss (Test only 0) - Targeted')
+plt.plot(percentiles, losses_random, marker='s', label='Loss (Test) - Random')
+plt.plot(percentiles, losses_zero_random, marker='s', label='Loss (Test only 0) - Random')
+plt.xlabel('Proportion of Data')
+plt.ylabel('Loss')
+plt.title('Fine-tuning Loss: Targeted vs Random Selection')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Plotting FID with Random comparison
+plt.figure(figsize=(10, 5))
+plt.plot(percentiles, fids_after, marker='o', label='FID (Test) - Targeted')
+plt.plot(percentiles, fids_zero_after, marker='o', label='FID (Test only 0) - Targeted')
+plt.plot(percentiles, fids_random, marker='s', label='FID (Test) - Random')
+plt.plot(percentiles, fids_zero_random, marker='s', label='FID (Test only 0) - Random')
+plt.xlabel('Proportion of Data')
+plt.ylabel('FID')
+plt.title('Fine-tuning FID: Targeted vs Random Selection')
+plt.legend()
+plt.grid(True)
+plt.show()
+
 def select_random_samples(dataloader, num_samples):
     all_samples = []
     for image, _ in tqdm(dataloader, leave=False):

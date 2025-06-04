@@ -10,7 +10,7 @@ from tqdm import tqdm, trange
 
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
-run = "runs/vae_l5_linear_512_no0"
+run = "runs/vae_l5_linear_no0"
 
 net = Simple_VAE().to(device)
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))

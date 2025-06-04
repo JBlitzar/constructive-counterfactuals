@@ -139,7 +139,7 @@ Finetuning on the full dataset shows little to no improvement, and the model per
 
 Constructive Counterfactuals for Targeted Finetuning works for any situation in which the finetuning set is disjoint from the training set, but I could see it being particularly helpful for domain generalization with adaptation, in which it's advantageous to retain both the previous knowledge and the new fine-tuned data.
 
-While this feels promising, it needs a bit more evidence to convincingly show that it's not statistical noise. I investigated the tradeoff between amount of finetuning data kept and FID / Loss. Here's the results. I also included when selecting the same amount from the test set randomly as a baseline comparison.
+While this feels promising, it needs a bit more evidence to convincingly show that it's not statistical noise. I investigated the tradeoff between amount of finetuning data kept and FID / Loss. Note that model checkpoints are reset in between trainings: each dot is an independent data point. Here's the results. I also included when selecting the same amount from the test set randomly as a baseline comparison. Scaling up, I also used a dataset size of 2048 instead.
 
 <!-- <div style="display: flex; gap: 10px;">
   <img src="results/finetuning_fid_vs_percentile.png" alt="FID vs Percentile" style="width: 49%;">
@@ -157,6 +157,6 @@ Of course, there's more of a curve with the "only 0" data rather than normal tes
 
 ---
 
-All code is available in this repository, and model weights are located at [runs/vae_l5_linear_512_no0/ckpt](runs/vae_l5_linear_512_no0/ckpt)
+All code is available in this repository, and model weights are located in [runs/](runs/)
 
 You should be able to reproduce my results by running `constructive_counterfactuals.py` or `targeted_finetuning.py`

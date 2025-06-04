@@ -10,7 +10,7 @@ transform_pipeline = transforms.Compose([
 ])
 
 FILTER_ZERO = True
-N_TRAIN = 512
+N_TRAIN = 2048
 
 
 def get_train_dataset(filter_override=False, invert_filter=False):

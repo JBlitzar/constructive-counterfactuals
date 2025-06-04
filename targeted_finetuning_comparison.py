@@ -1,3 +1,4 @@
+import os
 from fid_metric import compute_fid # import first to set the environment variable for MPS fallback!
 import torch
 import torch.nn as nn
@@ -7,6 +8,8 @@ from dataset import get_train_dataset, get_dataloader, get_test_dataset
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
+
+os.system(f"caffeinate -is -w {os.getpid()} &")
 
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
@@ -131,7 +134,7 @@ loss_test_zero, fid_test_zero = evaluate_model(net, get_test_dataset(invert_filt
 
 import matplotlib.pyplot as plt
 
-percentiles = np.arange(0.1, 1, 0.1).tolist()
+percentiles = np.arange(0.1, 1, 0.05).tolist()
 print(percentiles)
 losses_after, fids_after, losses_zero_after, fids_zero_after = [], [], [], []
 
@@ -176,7 +179,7 @@ plt.title('Fine-tuning Loss vs. Target Percentile')
 plt.legend()
 plt.grid(True)
 plt.savefig('results/finetuning_loss_vs_percentile.png')
-plt.show()
+#plt.show()
 
 # Plotting FID
 plt.figure(figsize=(10, 5))
@@ -188,7 +191,7 @@ plt.title('Fine-tuning FID vs. Target Percentile')
 plt.legend()
 plt.grid(True)
 plt.savefig('results/finetuning_fid_vs_percentile.png')
-plt.show()
+#plt.show()
 
 # Random selection comparison
 print("\nPerforming random selection comparison...")
@@ -240,7 +243,7 @@ plt.title('Fine-tuning Loss: Targeted vs Random Selection')
 plt.legend()
 plt.grid(True)
 plt.savefig('results/comparison_loss_vs_percentile.png')
-plt.show()
+#plt.show()
 
 # Plotting FID with Random comparison
 plt.figure(figsize=(10, 5))
@@ -254,7 +257,7 @@ plt.title('Fine-tuning FID: Targeted vs Random Selection')
 plt.legend()
 plt.grid(True)
 plt.savefig('results/comparison_fid_vs_percentile.png')
-plt.show()
+#plt.show()
 
 
 

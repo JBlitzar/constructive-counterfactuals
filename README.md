@@ -153,7 +153,7 @@ While this feels promising, it needs a bit more evidence to convincingly show th
   <img src="results/comparison_loss_vs_percentile.png" alt="Loss vs Percentile" style="width: 49%;">
 </div>
 
-Of course, there's more of a curve with the "only 0" data rather than normal test data because that's what the model's learning from. All of the loss comparisons seem similar, but with FID, constructive counterfactuals seems to consistently outperform random selection, with the most notable discrepancy at the 0.4 threshold, with more at 0.7 and 0.9. This is great! A new insight.
+Of course, there's more of a curve with the "only 0" data rather than normal test data because that's what the model's learning from. All of the loss comparisons seem similar, but with FID, constructive counterfactuals seems to consistently outperform random selection, with the most notable discrepancy at the 0.4 threshold, with more at 0.7 and 0.9. This is great! A new insight. Interestingly, FID seems to go up for both random selection and targeted finetuning past around the 0.45 mark. Perhaps this signifies overfitting.
 
 ---
 

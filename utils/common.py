@@ -2,6 +2,7 @@
 Common utilities and configurations shared across all modules.
 """
 import torch
+torch.manual_seed(42) # Set random seed for reproducibility
 import torch.nn as nn
 import torchvision
 import numpy as np

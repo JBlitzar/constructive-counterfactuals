@@ -2,9 +2,11 @@ import os
 
 os.system(f"caffeinate -is -w {os.getpid()} &")
 
+
 from architecture import Simple_VAE
 from dataset import get_train_dataset, get_test_dataset, get_dataloader
 import torch
+torch.manual_seed(42) # Set random seed for reproducibility
 from tqdm import tqdm, trange
 from logger import init_logger
 import torchvision

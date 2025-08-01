@@ -2,7 +2,6 @@ import os
 from fid_metric import compute_fid # import first to set the environment variable for MPS fallback!
 import torch
 import torch.nn as nn
-import torchvision
 from architecture import Simple_VAE
 from dataset import get_train_dataset, get_dataloader, get_test_dataset
 import numpy as np
@@ -132,9 +131,8 @@ print("\nBefore Fine-Tuning:")
 loss_test, fid_test = evaluate_model(net, get_test_dataset(), "Test")
 loss_test_zero, fid_test_zero = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
 
-import matplotlib.pyplot as plt
 
-percentiles = np.arange(0.1, 1, 0.05).tolist()
+percentiles = np.arange(0.01, 1, 0.01).tolist()
 print(percentiles)
 losses_after, fids_after, losses_zero_after, fids_zero_after = [], [], [], []
 

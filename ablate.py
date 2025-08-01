@@ -6,7 +6,6 @@
 # Check out that diff: tensor(6376.6074, device='mps:0', grad_fn=<AddBackward0>) tensor(34779.3555, device='mps:0', grad_fn=<AddBackward0>)
 
 import torch
-import torch.nn as nn
 import torchvision
 from architecture import Simple_VAE
 from dataset import get_train_dataset, get_dataloader

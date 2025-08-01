@@ -1,5 +1,5 @@
 import torchvision.datasets as dset
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 import torch
 import os

@@ -1,15 +1,11 @@
-import os
-
-os.system(f"caffeinate -is -w {os.getpid()} &")
-
 from architecture import Simple_VAE
 from dataset import get_train_dataset, get_test_dataset, get_dataloader
 import torch
-from tqdm import tqdm, trange
 from logger import init_logger
-import torchvision
 from trainingmanager import TrainingManager
+import os
 
+os.system(f"caffeinate -is -w {os.getpid()} &")
 
 
 EXPERIMENT_DIRECTORY = "runs/vae_l5_linear_no0"

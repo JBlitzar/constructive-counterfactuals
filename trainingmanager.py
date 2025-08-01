@@ -1,6 +1,6 @@
 import os
 import torch
-from logger import log_data, init_logger, log_img
+from logger import log_data
 import torch.nn as nn
 from tqdm import tqdm, trange
 from torch.profiler import profile, record_function, ProfilerActivity
@@ -8,7 +8,6 @@ import gc
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 
-from collections import defaultdict
 
 
 class ValueTracker:

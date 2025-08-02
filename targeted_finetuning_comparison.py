@@ -9,6 +9,7 @@ from dataset import get_train_dataset, get_dataloader, get_test_dataset
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm, trange
+import pandas as pd
 
 os.system(f"caffeinate -is -w {os.getpid()} &")
 
@@ -385,3 +386,37 @@ loss_test_full, fid_test_full = evaluate_model(net, get_test_dataset(), "Test")
 loss_test_zero_full, fid_test_zero_full = evaluate_model(
     net, get_test_dataset(invert_filter=True), "Test (only 0)"
 )
+
+# Save results to CSV
+
+results_df = pd.DataFrame(
+    {
+        "percentile": percentiles,
+        "loss_after_targeted": losses_after,
+        "fid_after_targeted": fids_after,
+        "loss_zero_after_targeted": losses_zero_after,
+        "fid_zero_after_targeted": fids_zero_after,
+        "loss_after_random": losses_random,
+        "fid_after_random": fids_random,
+        "loss_zero_after_random": losses_zero_random,
+        "fid_zero_after_random": fids_zero_random,
+    }
+)
+
+# Add baseline and final results
+baseline_results = pd.DataFrame(
+    {
+        "method": ["baseline", "random_final", "full_dataset"],
+        "loss_test": [loss_test, loss_test_random, loss_test_full],
+        "fid_test": [fid_test, fid_test_random, fid_test_full],
+        "loss_test_zero": [loss_test_zero, loss_test_zero_random, loss_test_zero_full],
+        "fid_test_zero": [fid_test_zero, fid_test_zero_random, fid_test_zero_full],
+    }
+)
+
+# Save to CSV files
+os.makedirs("results", exist_ok=True)
+results_df.to_csv("results/finetuning_comparison_results.csv", index=False)
+baseline_results.to_csv("results/baseline_and_final_results.csv", index=False)
+
+print("\nResults saved to CSV files in results/ directory")

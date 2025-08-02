@@ -1026,16 +1026,6 @@ targeted_fid0_after = [
 ]
 
 
-# Use the proportions list already defined at the top of the file (99 elements)
-# proportions variable is already defined above and has the correct length
-
-# Random selection results - using the actual data defined above
-# random_loss_after, random_fid_after, random_loss_0_after, random_fid_0_after already defined
-
-# Targeted selection results - using the actual data defined above
-# targeted_loss_after, targeted_fid_after, targeted_loss0_after, targeted_fid0_after already defined
-
-
 def create_comparison_plots(
     proportions,
     random_loss_after,

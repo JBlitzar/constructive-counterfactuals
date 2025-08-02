@@ -1026,76 +1026,14 @@ targeted_fid0_after = [
 import matplotlib.pyplot as plt
 import os
 
-# Your data lists (replace with your actual data)
-proportions = [
-    0.01,
-    0.02,
-    0.03,
-    0.04,
-    0.05,
-    0.06,
-    0.07,
-    0.08,
-    0.09,
-    0.1,
-    0.11,
-    0.12,
-    0.13,
-    0.14,
-    0.15,
-    0.16,
-    0.17,
-    0.18,
-    0.19,
-    0.2,
-    0.21,
-    0.22,
-    0.23,
-    0.24,
-    0.25,
-    0.26,
-    0.27,
-    0.28,
-    0.29,
-    0.3,
-    0.31,
-    0.32,
-    0.33,
-    0.34,
-    0.35000000000000003,
-    0.36,
-    0.37,
-    0.38,
-    0.39,
-    0.4,
-    0.41000000000000003,
-    0.42,
-    0.43,
-    0.44,
-    0.45,
-    0.46,
-    0.47000000000000003,
-    0.48,
-    0.49,
-    0.5,
-    0.51,
-    0.52,
-    0.53,
-    0.54,
-    0.55,
-]
+# Use the proportions list already defined at the top of the file (99 elements)
+# proportions variable is already defined above and has the correct length
 
-# Random selection results
-random_loss_after = []  # Replace with your actual data
-random_fid_after = []  # Replace with your actual data
-random_loss_0_after = []  # Replace with your actual data
-random_fid_0_after = []  # Replace with your actual data
+# Random selection results - using the actual data defined above
+# random_loss_after, random_fid_after, random_loss_0_after, random_fid_0_after already defined
 
-# Targeted selection results
-targeted_loss_after = []  # Replace with your actual data
-targeted_fid_after = []  # Replace with your actual data
-targeted_loss0_after = []  # Replace with your actual data
-targeted_fid0_after = []  # Replace with your actual data
+# Targeted selection results - using the actual data defined above
+# targeted_loss_after, targeted_fid_after, targeted_loss0_after, targeted_fid0_after already defined
 
 
 def create_comparison_plots(
@@ -1121,28 +1059,28 @@ def create_comparison_plots(
     plt.plot(
         proportions,
         targeted_loss_after,
-        marker="o",
+        # marker="o",
         label="Loss (Test) - Targeted",
         linewidth=2,
     )
     plt.plot(
         proportions,
         targeted_loss0_after,
-        marker="o",
+        # marker="o",
         label="Loss (Test only 0) - Targeted",
         linewidth=2,
     )
     plt.plot(
         proportions,
         random_loss_after,
-        marker="s",
+        # marker="s",
         label="Loss (Test) - Random",
         linewidth=2,
     )
     plt.plot(
         proportions,
         random_loss_0_after,
-        marker="s",
+        # marker="s",
         label="Loss (Test only 0) - Random",
         linewidth=2,
     )
@@ -1163,28 +1101,28 @@ def create_comparison_plots(
     plt.plot(
         proportions,
         targeted_fid_after,
-        marker="o",
+        # marker="o",
         label="FID (Test) - Targeted",
         linewidth=2,
     )
     plt.plot(
         proportions,
         targeted_fid0_after,
-        marker="o",
+        # marker="o",
         label="FID (Test only 0) - Targeted",
         linewidth=2,
     )
     plt.plot(
         proportions,
         random_fid_after,
-        marker="s",
+        # marker="s",
         label="FID (Test) - Random",
         linewidth=2,
     )
     plt.plot(
         proportions,
         random_fid_0_after,
-        marker="s",
+        # marker="s",
         label="FID (Test only 0) - Random",
         linewidth=2,
     )
@@ -1243,7 +1181,7 @@ if __name__ == "__main__":
     example_targeted_loss_0 = [0.018 + i * 0.0001 for i in range(len(proportions))]
     example_targeted_fid_0 = [28 + i * 0.1 for i in range(len(proportions))]
 
-    # To use with your real data, replace the example data with your actual lists:
+    # To use with your real data, use the actual data lists already defined in the file:
     create_comparison_plots(
         proportions,
         random_loss_after,

@@ -1045,31 +1045,32 @@ def create_comparison_plots(
     os.makedirs("results", exist_ok=True)
 
     # Plot 1: Loss Comparison
-    plt.figure(figsize=(12, 8))
-
-    # Loss subplot
-    plt.subplot(2, 1, 1)
+    plt.figure(figsize=(10, 5))
     plt.plot(
         proportions,
         targeted_loss_after,
+        # marker="o",
         label="Loss (Test) - Targeted",
         linewidth=2,
     )
     plt.plot(
         proportions,
         targeted_loss0_after,
+        # marker="o",
         label="Loss (Test only 0) - Targeted",
         linewidth=2,
     )
     plt.plot(
         proportions,
         random_loss_after,
+        # marker="s",
         label="Loss (Test) - Random",
         linewidth=2,
     )
     plt.plot(
         proportions,
         random_loss_0_after,
+        # marker="s",
         label="Loss (Test only 0) - Random",
         linewidth=2,
     )
@@ -1079,30 +1080,39 @@ def create_comparison_plots(
     plt.title("Fine-tuning Loss: Targeted vs Random Selection")
     plt.legend()
     plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.savefig(
+        "results/comparison_loss_vs_percentile.png", dpi=300, bbox_inches="tight"
+    )
+    print("Loss comparison plot saved to: results/comparison_loss_vs_percentile.png")
 
-    # FID subplot
-    plt.subplot(2, 1, 2)
+    # Plot 2: FID Comparison
+    plt.figure(figsize=(10, 5))
     plt.plot(
         proportions,
         targeted_fid_after,
+        # marker="o",
         label="FID (Test) - Targeted",
         linewidth=2,
     )
     plt.plot(
         proportions,
         targeted_fid0_after,
+        # marker="o",
         label="FID (Test only 0) - Targeted",
         linewidth=2,
     )
     plt.plot(
         proportions,
         random_fid_after,
+        # marker="s",
         label="FID (Test) - Random",
         linewidth=2,
     )
     plt.plot(
         proportions,
         random_fid_0_after,
+        # marker="s",
         label="FID (Test only 0) - Random",
         linewidth=2,
     )
@@ -1112,14 +1122,11 @@ def create_comparison_plots(
     plt.title("Fine-tuning FID: Targeted vs Random Selection")
     plt.legend()
     plt.grid(True, alpha=0.3)
-
     plt.tight_layout()
     plt.savefig(
-        "results/comparison_metrics_vs_percentile.png", dpi=300, bbox_inches="tight"
+        "results/comparison_fid_vs_percentile.png", dpi=300, bbox_inches="tight"
     )
-    print(
-        "Combined comparison plot saved to: results/comparison_metrics_vs_percentile.png"
-    )
+    print("FID comparison plot saved to: results/comparison_fid_vs_percentile.png")
 
     # Clean up matplotlib figures to free memory
     plt.close("all")
@@ -1148,7 +1155,23 @@ def create_comparison_plots(
         )
 
 
+# Example usage with placeholder data
 if __name__ == "__main__":
+    # Replace these with your actual data lists
+    # You can paste your parsed results here
+
+    # Example data (replace with your actual lists)
+    example_random_loss = [0.015 + i * 0.0001 for i in range(len(proportions))]
+    example_random_fid = [25 + i * 0.1 for i in range(len(proportions))]
+    example_random_loss_0 = [0.02 + i * 0.0001 for i in range(len(proportions))]
+    example_random_fid_0 = [30 + i * 0.1 for i in range(len(proportions))]
+
+    example_targeted_loss = [0.014 + i * 0.0001 for i in range(len(proportions))]
+    example_targeted_fid = [23 + i * 0.1 for i in range(len(proportions))]
+    example_targeted_loss_0 = [0.018 + i * 0.0001 for i in range(len(proportions))]
+    example_targeted_fid_0 = [28 + i * 0.1 for i in range(len(proportions))]
+
+    # To use with your real data, use the actual data lists already defined in the file:
     create_comparison_plots(
         proportions,
         random_loss_after,

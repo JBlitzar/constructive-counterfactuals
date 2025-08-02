@@ -5,9 +5,8 @@ import torch.nn as nn
 from tqdm import tqdm, trange
 from torch.profiler import profile, record_function, ProfilerActivity
 import gc
+
 device = "mps" if torch.backends.mps.is_available() else "cpu"
-
-
 
 
 class ValueTracker:
@@ -53,7 +52,6 @@ class TrainingManager:
         epochs=100,
         val_dataloader=None,
     ):
-
         learning_rate = 0.001
 
         self.clip = 1.0
@@ -163,14 +161,14 @@ class TrainingManager:
             {"Loss/Trainstep": self.tracker.average("Loss/trainstep")},
             epoch * dataloader_len + step,
         )
-        #print(f"Look at me! I'm logging accuracy! this is trainloop checkin. {self.tracker.average('Acc/trainstep')}")
+        # print(f"Look at me! I'm logging accuracy! this is trainloop checkin. {self.tracker.average('Acc/trainstep')}")
         # log_data(
         #     {"Acc/Trainstep": self.tracker.average("Acc/trainstep")},
         #     epoch * dataloader_len + step,
         # )
 
         self.tracker.reset("Loss/trainstep")
-        #self.tracker.reset("Acc/trainstep")
+        # self.tracker.reset("Acc/trainstep")
 
     def on_epoch_checkin(self, epoch):
         if self.hasnan():
@@ -199,7 +197,7 @@ class TrainingManager:
         #     {"Acc/Trainstep": self.tracker.average("Acc/trainstep")},
         #     epoch,
         # )
-        #print(self.tracker.average("Acc/trainstep"))
+        # print(self.tracker.average("Acc/trainstep"))
 
         self.tracker.reset("Acc/epoch")
 
@@ -266,7 +264,6 @@ class TrainingManager:
                 self.on_trainloop_checkin(epoch, step, len(dataloader))
 
     def epoch(self, epoch: int, dataloader, val_loader=None):
-
         self.net.train()
         self.train_loop(dataloader, epoch)
 
@@ -276,7 +273,6 @@ class TrainingManager:
         self.on_epoch_checkin(epoch)
 
     def train(self, epochs=None, dataloader=None):
-
         if epochs is not None:
             self.epochs = epochs
 
@@ -286,7 +282,6 @@ class TrainingManager:
         for e in trange(
             self.epochs, dynamic_ncols=True, unit_scale=True, unit_divisor=60
         ):
-
             if e <= self.resume_amt:
                 continue
 
@@ -294,7 +289,9 @@ class TrainingManager:
 
         print("All done!")
         gc.collect()
-        os.system("""osascript -e 'display notification "Training complete" with title "Training Complete"'""")
+        os.system(
+            """osascript -e 'display notification "Training complete" with title "Training Complete"'"""
+        )
 
     def nan_debug(self):
         torch.autograd.set_detect_anomaly(True)
@@ -313,13 +310,12 @@ class TrainingManager:
         return sum(p.numel() for p in self.net.parameters())
 
     def profile_trainstep(self):
-        
         self.net.train()
         data = next(iter(self.dataloader))
 
-        #https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html
+        # https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html
         with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
             with record_function("train_step"):
                 self.trainstep(data)
-        
+
         print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))

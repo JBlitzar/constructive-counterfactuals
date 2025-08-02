@@ -14,6 +14,7 @@ from architecture import Simple_VAE
 from dataset import get_train_dataset, get_dataloader
 import numpy as np
 import matplotlib.pyplot as plt
+
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 run = "runs/vae_l5_linear_no0"
@@ -23,7 +24,6 @@ net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
 
 
 USE_MSE_INSTEAD = True
-
 
 
 def get_loss(image, net, mse_instead=False):
@@ -49,7 +49,7 @@ def loss_recon_package(image, net, mse_instead=False):
     return loss.item(), reconstructed
 
 
-def reverse_ablate(image, net,strength=0.001):
+def reverse_ablate(image, net, strength=0.001):
     net.eval()
     net.zero_grad()
 
@@ -61,8 +61,11 @@ def reverse_ablate(image, net,strength=0.001):
             if param.grad is not None:
                 param.data = param - torch.sign(param.grad) * strength
 
+
 def before_after(item, net):
-    before_loss, before_recon = loss_recon_package(item, net, mse_instead=USE_MSE_INSTEAD)
+    before_loss, before_recon = loss_recon_package(
+        item, net, mse_instead=USE_MSE_INSTEAD
+    )
 
     reverse_ablate(item, net)
 
@@ -78,42 +81,65 @@ dataloader = get_dataloader(trainset, batch_size=1)
 for dummy_item, _ in dataloader:
     dummy = dummy_item.to(device)
 
-    before_dummy_loss, before_dummy_recon = loss_recon_package(dummy, net, mse_instead=USE_MSE_INSTEAD)
-    
+    before_dummy_loss, before_dummy_recon = loss_recon_package(
+        dummy, net, mse_instead=USE_MSE_INSTEAD
+    )
+
     break
 
 for dummy_item_zero, label in dataloader:
     if label[0] == 0:
         dummy_zero = dummy_item_zero.to(device)
 
-        before_dummy_zero_loss, before_dummy_zero_recon = loss_recon_package(dummy_zero, net, mse_instead=USE_MSE_INSTEAD)
-        
+        before_dummy_zero_loss, before_dummy_zero_recon = loss_recon_package(
+            dummy_zero, net, mse_instead=USE_MSE_INSTEAD
+        )
+
         break
-    
+
 
 for item, label in dataloader:
     print("loopinginging")
     if label[0] == 0:
         print("found 0")
-        before_loss, before_recon, after_loss, after_recon = before_after(item.to(device), net)
+        before_loss, before_recon, after_loss, after_recon = before_after(
+            item.to(device), net
+        )
 
         item = item.to(device)
 
-        dummy_loss, dummy_recon = loss_recon_package(dummy, net, mse_instead=USE_MSE_INSTEAD)
+        dummy_loss, dummy_recon = loss_recon_package(
+            dummy, net, mse_instead=USE_MSE_INSTEAD
+        )
 
-        dummy_zero_loss, dummy_zero_recon = loss_recon_package(dummy_zero, net, mse_instead=USE_MSE_INSTEAD)
+        dummy_zero_loss, dummy_zero_recon = loss_recon_package(
+            dummy_zero, net, mse_instead=USE_MSE_INSTEAD
+        )
 
         assert torch.ne(before_recon, after_recon).all()
-
 
         print(before_loss, after_loss)
         print(before_dummy_loss, dummy_loss)
         print(before_dummy_zero_loss, dummy_zero_loss)
-        grid = torchvision.utils.make_grid([item[0], before_recon[0], after_recon[0], dummy[0], before_dummy_recon[0], dummy_recon[0], dummy_zero[0],before_dummy_zero_recon[0],dummy_zero_recon[0]], nrow=3).cpu().numpy()
+        grid = (
+            torchvision.utils.make_grid(
+                [
+                    item[0],
+                    before_recon[0],
+                    after_recon[0],
+                    dummy[0],
+                    before_dummy_recon[0],
+                    dummy_recon[0],
+                    dummy_zero[0],
+                    before_dummy_zero_recon[0],
+                    dummy_zero_recon[0],
+                ],
+                nrow=3,
+            )
+            .cpu()
+            .numpy()
+        )
         plt.imshow(np.transpose(grid, (1, 2, 0)))
         plt.show()
 
-
         break
-    
-    

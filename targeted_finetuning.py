@@ -1,4 +1,6 @@
-from fid_metric import compute_fid # import first to set the environment variable for MPS fallback!
+from fid_metric import (
+    compute_fid,
+)  # import first to set the environment variable for MPS fallback!
 import torch
 import torch.nn as nn
 from architecture import Simple_VAE
@@ -66,7 +68,6 @@ def select_hard_samples(dataloader, net, threshold=0.01, easy_instead=False):
 
 
 def evaluate_model(net, dataset, label=""):
-
     with torch.no_grad():
         net.eval()
         avg_loss = 0
@@ -84,7 +85,7 @@ def evaluate_model(net, dataset, label=""):
         avg_loss /= len(dataset)
         real_images = torch.cat(real_images, dim=0).repeat(1, 3, 1, 1)
         generated_images = torch.cat(generated_images, dim=0).repeat(1, 3, 1, 1)
-        
+
         fid_score = compute_fid(real_images, generated_images)
 
         print(f"Avg Loss on {label} Set: {avg_loss}")
@@ -94,11 +95,15 @@ def evaluate_model(net, dataset, label=""):
 
 print("\nBefore Fine-Tuning:")
 loss_test, fid_test = evaluate_model(net, get_test_dataset(), "Test")
-loss_test_zero, fid_test_zero = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+loss_test_zero, fid_test_zero = evaluate_model(
+    net, get_test_dataset(invert_filter=True), "Test (only 0)"
+)
 
 easy = False
 hard_samples = select_hard_samples(dataloader, net, easy_instead=easy)
-print(f"Selected {len(hard_samples)} {'easy' if easy else 'hard'} samples for fine-tuning")
+print(
+    f"Selected {len(hard_samples)} {'easy' if easy else 'hard'} samples for fine-tuning"
+)
 
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
 
@@ -116,16 +121,19 @@ torch.save(net.state_dict(), f"{run}/ckpt/fine_tuned.pt")
 
 print("\nAfter Fine-Tuning:")
 loss_test_after, fid_test_after = evaluate_model(net, get_test_dataset(), "Test")
-loss_test_zero_after, fid_test_zero_after = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+loss_test_zero_after, fid_test_zero_after = evaluate_model(
+    net, get_test_dataset(invert_filter=True), "Test (only 0)"
+)
+
 
 def select_random_samples(dataloader, num_samples):
     all_samples = []
     for image, _ in tqdm(dataloader, leave=False):
         all_samples.append(image.to(device))
-    
+
     if num_samples >= len(all_samples):
         return all_samples
-    
+
     indices = np.random.choice(len(all_samples), num_samples, replace=False)
     return [all_samples[i] for i in indices]
 
@@ -149,8 +157,9 @@ torch.save(net.state_dict(), f"{run}/ckpt/random_fine_tuned.pt")
 # After Random Fine-Tuning Metrics
 print("\nAfter Random Fine-Tuning:")
 loss_test_random, fid_test_random = evaluate_model(net, get_test_dataset(), "Test")
-loss_test_zero_random, fid_test_zero_random = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
-
+loss_test_zero_random, fid_test_zero_random = evaluate_model(
+    net, get_test_dataset(invert_filter=True), "Test (only 0)"
+)
 
 
 print(f"Finetuning on full dataset ({len(dataloader.dataset)} samples)...")
@@ -168,5 +177,6 @@ for epoch in trange(epochs, leave=False):
 
 print("\nAfter Fine-Tuning on Full Dataset:")
 loss_test_full, fid_test_full = evaluate_model(net, get_test_dataset(), "Test")
-loss_test_zero_full, fid_test_zero_full = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
-
+loss_test_zero_full, fid_test_zero_full = evaluate_model(
+    net, get_test_dataset(invert_filter=True), "Test (only 0)"
+)

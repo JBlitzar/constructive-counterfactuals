@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import os
+
 # Proportions
 proportions = [
     0.01,
@@ -1022,9 +1025,6 @@ targeted_fid0_after = [
     26.8619384765625,
 ]
 
-
-import matplotlib.pyplot as plt
-import os
 
 # Use the proportions list already defined at the top of the file (99 elements)
 # proportions variable is already defined above and has the correct length

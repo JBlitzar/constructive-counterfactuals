@@ -1,5 +1,7 @@
 import os
-from fid_metric import compute_fid # import first to set the environment variable for MPS fallback!
+from fid_metric import (
+    compute_fid,
+)  # import first to set the environment variable for MPS fallback!
 import torch
 import torch.nn as nn
 from architecture import Simple_VAE
@@ -10,11 +12,17 @@ from tqdm import tqdm, trange
 
 os.system(f"caffeinate -is -w {os.getpid()} &")
 
-def print(s):
+
+def print(s, *args, **kwargs):
+    if args or kwargs:
+        s = " ".join([str(s)] + list([str(i) for i in args]))
+
     tqdm.write(str(s))
+
+
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
-run = "runs/vae_l5_linear_no0"#"runs/vae_l5_linear_512_no0"
+run = "runs/vae_l5_linear_no0"  # "runs/vae_l5_linear_512_no0"
 
 net = Simple_VAE().to(device)
 net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
@@ -70,7 +78,10 @@ def select_hard_samples(dataloader, net, threshold=0.01, easy_instead=False):
     net.zero_grad()
     return hard_samples
 
-def select_hard_samples_by_target(dataloader, net, target_percentile=0.5, easy_instead=False):
+
+def select_hard_samples_by_target(
+    dataloader, net, target_percentile=0.5, easy_instead=False
+):
     hard_samples = []
     all_samples = []
     loss_diffs = []
@@ -85,10 +96,10 @@ def select_hard_samples_by_target(dataloader, net, target_percentile=0.5, easy_i
         loss_diff = (before_loss - after_loss).abs()
         all_samples.append(image.detach())  # Add .detach() to break gradients
         loss_diffs.append(loss_diff.item())
-    
+
     loss_diffs = np.array(loss_diffs)
     threshold = np.percentile(loss_diffs, target_percentile * 100)
-    
+
     # Create hard_samples list without stacking all samples first
     selected_samples = []
     for i, image in enumerate(all_samples):
@@ -98,17 +109,17 @@ def select_hard_samples_by_target(dataloader, net, target_percentile=0.5, easy_i
         else:
             if loss_diffs[i] < threshold:
                 selected_samples.append(image.detach())
-    
+
     # Only stack the selected samples
     if selected_samples:
         hard_samples = torch.stack(selected_samples)
     else:
         hard_samples = torch.empty(0, *all_samples[0].shape[1:]).to(device)
-    
+
     # Explicitly delete large objects and clear cache
     del all_samples, loss_diffs, selected_samples
     torch.cuda.empty_cache() if torch.cuda.is_available() else None
-    if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
         torch.mps.empty_cache()
 
     net.zero_grad()
@@ -133,13 +144,13 @@ def evaluate_model(net, dataset, label=""):
         avg_loss /= len(dataset)
         real_images = torch.cat(real_images, dim=0).repeat(1, 3, 1, 1)
         generated_images = torch.cat(generated_images, dim=0).repeat(1, 3, 1, 1)
-        
+
         fid_score = compute_fid(real_images, generated_images)
-        
+
         # Clean up memory
         del real_images, generated_images
         torch.cuda.empty_cache() if torch.cuda.is_available() else None
-        if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+        if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
             torch.mps.empty_cache()
 
         print(f"Avg Loss on {label} Set: {avg_loss}")
@@ -149,7 +160,9 @@ def evaluate_model(net, dataset, label=""):
 
 print("\nBefore Fine-Tuning:")
 loss_test, fid_test = evaluate_model(net, get_test_dataset(), "Test")
-loss_test_zero, fid_test_zero = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+loss_test_zero, fid_test_zero = evaluate_model(
+    net, get_test_dataset(invert_filter=True), "Test (only 0)"
+)
 
 
 percentiles = np.arange(0.01, 1, 0.01).tolist()
@@ -158,8 +171,12 @@ losses_after, fids_after, losses_zero_after, fids_zero_after = [], [], [], []
 
 for perc in tqdm(percentiles):
     print(f"\nFine-tuning with target percentile {perc}...")
-    hard_samples = select_hard_samples_by_target(dataloader, net, target_percentile=perc, easy_instead=False)
-    print(f"Selected {len(hard_samples)} hard samples for fine-tuning at percentile {perc}")
+    hard_samples = select_hard_samples_by_target(
+        dataloader, net, target_percentile=perc, easy_instead=False
+    )
+    print(
+        f"Selected {len(hard_samples)} hard samples for fine-tuning at percentile {perc}"
+    )
 
     net.load_state_dict(torch.load(f"{run}/ckpt/best.pt", weights_only=True))
     net.train()
@@ -174,17 +191,19 @@ for perc in tqdm(percentiles):
 
     print("\nAfter Fine-Tuning:")
     loss_test_after, fid_test_after = evaluate_model(net, get_test_dataset(), "Test")
-    loss_test_zero_after, fid_test_zero_after = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+    loss_test_zero_after, fid_test_zero_after = evaluate_model(
+        net, get_test_dataset(invert_filter=True), "Test (only 0)"
+    )
 
     losses_after.append(loss_test_after)
     fids_after.append(fid_test_after)
     losses_zero_after.append(loss_test_zero_after)
     fids_zero_after.append(fid_test_zero_after)
-    
+
     # Clean up after each percentile
     del hard_samples
     torch.cuda.empty_cache() if torch.cuda.is_available() else None
-    if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
         torch.mps.empty_cache()
 
 # Print results
@@ -195,48 +214,52 @@ print("Loss 0 after:", losses_zero_after)
 print("FID 0 after:", fids_zero_after)
 # Plotting Loss
 plt.figure(figsize=(10, 5))
-plt.plot(percentiles, losses_after, marker='o', label='Loss (Test)')
-plt.plot(percentiles, losses_zero_after, marker='o', label='Loss (Test only 0)')
-plt.xlabel('Target Percentile')
-plt.ylabel('Loss')
-plt.title('Fine-tuning Loss vs. Target Percentile')
+plt.plot(percentiles, losses_after, marker="o", label="Loss (Test)")
+plt.plot(percentiles, losses_zero_after, marker="o", label="Loss (Test only 0)")
+plt.xlabel("Target Percentile")
+plt.ylabel("Loss")
+plt.title("Fine-tuning Loss vs. Target Percentile")
 plt.legend()
 plt.grid(True)
-plt.savefig('results/finetuning_loss_vs_percentile.png')
-#plt.show()
+plt.savefig("results/finetuning_loss_vs_percentile.png")
+# plt.show()
 
 # Plotting FID
 plt.figure(figsize=(10, 5))
-plt.plot(percentiles, fids_after, marker='o', label='FID (Test)')
-plt.plot(percentiles, fids_zero_after, marker='o', label='FID (Test only 0)')
-plt.xlabel('Target Percentile')
-plt.ylabel('FID')
-plt.title('Fine-tuning FID vs. Target Percentile')
+plt.plot(percentiles, fids_after, marker="o", label="FID (Test)")
+plt.plot(percentiles, fids_zero_after, marker="o", label="FID (Test only 0)")
+plt.xlabel("Target Percentile")
+plt.ylabel("FID")
+plt.title("Fine-tuning FID vs. Target Percentile")
 plt.legend()
 plt.grid(True)
-plt.savefig('results/finetuning_fid_vs_percentile.png')
-#plt.show()
+plt.savefig("results/finetuning_fid_vs_percentile.png")
+# plt.show()
 
 # Random selection comparison
 print("\nPerforming random selection comparison...")
+
+
 def select_random_samples(dataloader, num_samples):
     all_samples = []
     for image, _ in tqdm(dataloader, leave=False):
         all_samples.append(image.detach().to(device))  # Add .detach()
-    
+
     if num_samples >= len(all_samples):
         selected = all_samples
     else:
         indices = np.random.choice(len(all_samples), num_samples, replace=False)
         selected = [all_samples[i] for i in indices]
-    
+
     # Clean up the full list
     del all_samples
     torch.cuda.empty_cache() if torch.cuda.is_available() else None
-    if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
         torch.mps.empty_cache()
-    
+
     return selected
+
+
 losses_random, fids_random, losses_zero_random, fids_zero_random = [], [], [], []
 
 for perc in tqdm(percentiles):
@@ -256,49 +279,61 @@ for perc in tqdm(percentiles):
 
     print("\nAfter Random Fine-Tuning:")
     loss_test_after, fid_test_after = evaluate_model(net, get_test_dataset(), "Test")
-    loss_test_zero_after, fid_test_zero_after = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+    loss_test_zero_after, fid_test_zero_after = evaluate_model(
+        net, get_test_dataset(invert_filter=True), "Test (only 0)"
+    )
 
     losses_random.append(loss_test_after)
     fids_random.append(fid_test_after)
     losses_zero_random.append(loss_test_zero_after)
     fids_zero_random.append(fid_test_zero_after)
-    
+
     # Clean up after each percentile
     del random_samples
     torch.cuda.empty_cache() if torch.cuda.is_available() else None
-    if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
         torch.mps.empty_cache()
+
+print("\nRandom Selection Results:")
+print("Loss after (random):", losses_random)
+print("FID after (random):", fids_random)
+print("Loss 0 after (random):", losses_zero_random)
+print("FID 0 after (random):", fids_zero_random)
 
 # Plotting Loss with Random comparison
 plt.figure(figsize=(10, 5))
-plt.plot(percentiles, losses_after, marker='o', label='Loss (Test) - Targeted')
-plt.plot(percentiles, losses_zero_after, marker='o', label='Loss (Test only 0) - Targeted')
-plt.plot(percentiles, losses_random, marker='s', label='Loss (Test) - Random')
-plt.plot(percentiles, losses_zero_random, marker='s', label='Loss (Test only 0) - Random')
-plt.xlabel('Proportion of Data')
-plt.ylabel('Loss')
-plt.title('Fine-tuning Loss: Targeted vs Random Selection')
+plt.plot(percentiles, losses_after, marker="o", label="Loss (Test) - Targeted")
+plt.plot(
+    percentiles, losses_zero_after, marker="o", label="Loss (Test only 0) - Targeted"
+)
+plt.plot(percentiles, losses_random, marker="s", label="Loss (Test) - Random")
+plt.plot(
+    percentiles, losses_zero_random, marker="s", label="Loss (Test only 0) - Random"
+)
+plt.xlabel("Proportion of Data")
+plt.ylabel("Loss")
+plt.title("Fine-tuning Loss: Targeted vs Random Selection")
 plt.legend()
 plt.grid(True)
-plt.savefig('results/comparison_loss_vs_percentile.png')
-#plt.show()
+plt.savefig("results/comparison_loss_vs_percentile.png")
+# plt.show()
 
 # Plotting FID with Random comparison
 plt.figure(figsize=(10, 5))
-plt.plot(percentiles, fids_after, marker='o', label='FID (Test) - Targeted')
-plt.plot(percentiles, fids_zero_after, marker='o', label='FID (Test only 0) - Targeted')
-plt.plot(percentiles, fids_random, marker='s', label='FID (Test) - Random')
-plt.plot(percentiles, fids_zero_random, marker='s', label='FID (Test only 0) - Random')
-plt.xlabel('Proportion of Data')
-plt.ylabel('FID')
-plt.title('Fine-tuning FID: Targeted vs Random Selection')
+plt.plot(percentiles, fids_after, marker="o", label="FID (Test) - Targeted")
+plt.plot(percentiles, fids_zero_after, marker="o", label="FID (Test only 0) - Targeted")
+plt.plot(percentiles, fids_random, marker="s", label="FID (Test) - Random")
+plt.plot(percentiles, fids_zero_random, marker="s", label="FID (Test only 0) - Random")
+plt.xlabel("Proportion of Data")
+plt.ylabel("FID")
+plt.title("Fine-tuning FID: Targeted vs Random Selection")
 plt.legend()
 plt.grid(True)
-plt.savefig('results/comparison_fid_vs_percentile.png')
-#plt.show()
+plt.savefig("results/comparison_fid_vs_percentile.png")
+# plt.show()
 
 # Clean up matplotlib figures to free memory
-plt.close('all')
+plt.close("all")
 
 # Get the number of samples from the last targeted run for comparison
 last_targeted_samples_count = int(len(dataloader.dataset) * percentiles[-1])
@@ -322,12 +357,14 @@ torch.save(net.state_dict(), f"{run}/ckpt/random_fine_tuned.pt")
 # After Random Fine-Tuning Metrics
 print("\nAfter Random Fine-Tuning:")
 loss_test_random, fid_test_random = evaluate_model(net, get_test_dataset(), "Test")
-loss_test_zero_random, fid_test_zero_random = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
+loss_test_zero_random, fid_test_zero_random = evaluate_model(
+    net, get_test_dataset(invert_filter=True), "Test (only 0)"
+)
 
 # Clean up
 del random_samples
 torch.cuda.empty_cache() if torch.cuda.is_available() else None
-if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
     torch.mps.empty_cache()
 
 print(f"Finetuning on full dataset ({len(dataloader.dataset)} samples)...")
@@ -345,5 +382,6 @@ for epoch in trange(epochs, leave=False):
 
 print("\nAfter Fine-Tuning on Full Dataset:")
 loss_test_full, fid_test_full = evaluate_model(net, get_test_dataset(), "Test")
-loss_test_zero_full, fid_test_zero_full = evaluate_model(net, get_test_dataset(invert_filter=True), "Test (only 0)")
-
+loss_test_zero_full, fid_test_zero_full = evaluate_model(
+    net, get_test_dataset(invert_filter=True), "Test (only 0)"
+)

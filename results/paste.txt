@@ -1,0 +1,909 @@
+Performing random selection comparison...
+                                                                                                                                                                              
+Fine-tuning with random 0.01 proportion...
+Selected 20 random samples for fine-tuning                                                                                                                                    
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015223405577842186                                                                                                                                    
+FID on Test Set: 22.299713134765625                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.024970149791476375                                                                                                                           
+FID on Test (only 0) Set: 56.17433166503906                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.02 proportion...
+Selected 40 random samples for fine-tuning                                                                                                                                    
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015293522157776351                                                                                                                                    
+FID on Test Set: 23.580764770507812                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.0226791541263157                                                                                                                             
+FID on Test (only 0) Set: 48.41624450683594                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.03 proportion...
+Selected 61 random samples for fine-tuning                                                                                                                                    
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015402884975742381                                                                                                                                    
+FID on Test Set: 22.6419677734375                                                                                                                                             
+Avg Loss on Test (only 0) Set: 0.021539530821847824                                                                                                                           
+FID on Test (only 0) Set: 45.86168670654297                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.04 proportion...
+Selected 81 random samples for fine-tuning                                                                                                                                    
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015179678554147813                                                                                                                                    
+FID on Test Set: 22.38116455078125                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.02008334460088565                                                                                                                            
+FID on Test (only 0) Set: 42.14452362060547                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.05 proportion...
+Selected 102 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01522185070228943                                                                                                                                     
+FID on Test Set: 22.736007690429688                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.019616836067099047                                                                                                                           
+FID on Test (only 0) Set: 40.79627990722656                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.06 proportion...
+Selected 122 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015269283687075585                                                                                                                                    
+FID on Test Set: 22.025955200195312                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01919506417245281                                                                                                                            
+FID on Test (only 0) Set: 40.245330810546875                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.07 proportion...
+Selected 143 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015157063558604023                                                                                                                                    
+FID on Test Set: 23.103912353515625                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.018492880389474484                                                                                                                           
+FID on Test (only 0) Set: 36.27222442626953                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.08 proportion...
+Selected 163 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015126205423712236                                                                                                                                    
+FID on Test Set: 22.227279663085938                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.017978647287117736                                                                                                                           
+FID on Test (only 0) Set: 39.06610107421875                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.09 proportion...
+Selected 184 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.0149189236416305                                                                                                                                      
+FID on Test Set: 24.1263427734375                                                                                                                                             
+Avg Loss on Test (only 0) Set: 0.01763539317453622                                                                                                                            
+FID on Test (only 0) Set: 35.723411560058594                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.1 proportion...
+Selected 204 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015137844379353282                                                                                                                                    
+FID on Test Set: 23.72503662109375                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.017236994009712063                                                                                                                           
+FID on Test (only 0) Set: 35.49217987060547                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.11 proportion...
+Selected 225 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015292416118825258                                                                                                                                    
+FID on Test Set: 24.000640869140625                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.016991542508749635                                                                                                                           
+FID on Test (only 0) Set: 32.418701171875                                                                                                                                     
+                                                                                                                                                                              
+Fine-tuning with random 0.12 proportion...
+Selected 245 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015212174219641383                                                                                                                                    
+FID on Test Set: 24.415374755859375                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.016671479071433445                                                                                                                           
+FID on Test (only 0) Set: 33.68946838378906                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.13 proportion...
+Selected 266 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015195759903974704                                                                                                                                    
+FID on Test Set: 23.866958618164062                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.016470993855702026                                                                                                                           
+FID on Test (only 0) Set: 30.755462646484375                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.14 proportion...
+Selected 286 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01487011969499008                                                                                                                                     
+FID on Test Set: 24.056472778320312                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.016314046591881435                                                                                                                           
+FID on Test (only 0) Set: 32.998130798339844                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.15 proportion...
+Selected 307 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014912603118830248                                                                                                                                    
+FID on Test Set: 24.447906494140625                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01587808228582524                                                                                                                            
+FID on Test (only 0) Set: 31.135589599609375                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.16 proportion...
+Selected 327 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01508283793918963                                                                                                                                     
+FID on Test Set: 24.132080078125                                                                                                                                              
+Avg Loss on Test (only 0) Set: 0.01563637037191312                                                                                                                            
+FID on Test (only 0) Set: 29.206771850585938                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.17 proportion...
+Selected 348 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015053772693420342                                                                                                                                    
+FID on Test Set: 24.239532470703125                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.015502317426060992                                                                                                                           
+FID on Test (only 0) Set: 30.249771118164062                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.18 proportion...
+Selected 368 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015308911259012348                                                                                                                                    
+FID on Test Set: 24.798370361328125                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.015367768574220945                                                                                                                           
+FID on Test (only 0) Set: 31.07958984375                                                                                                                                      
+                                                                                                                                                                              
+Fine-tuning with random 0.19 proportion...
+Selected 389 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014916737385362921                                                                                                                                    
+FID on Test Set: 23.926773071289062                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.015192607289883402                                                                                                                           
+FID on Test (only 0) Set: 30.207061767578125                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.2 proportion...
+Selected 409 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014932797347739779                                                                                                                                    
+FID on Test Set: 25.219268798828125                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.015105720256379216                                                                                                                           
+FID on Test (only 0) Set: 28.1751708984375                                                                                                                                    
+                                                                                                                                                                              
+Fine-tuning with random 0.21 proportion...
+Selected 430 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015424947658971178                                                                                                                                    
+FID on Test Set: 25.229446411132812                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.014972363114452028                                                                                                                           
+FID on Test (only 0) Set: 29.237205505371094                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.22 proportion...
+Selected 450 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01501237618236928                                                                                                                                     
+FID on Test Set: 23.80877685546875                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.014828427145922822                                                                                                                           
+FID on Test (only 0) Set: 27.974288940429688                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.23 proportion...
+Selected 471 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015125649794526907                                                                                                                                    
+FID on Test Set: 25.058074951171875                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.014682938670739531                                                                                                                           
+FID on Test (only 0) Set: 28.469940185546875                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.24 proportion...
+Selected 491 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014782643913008542                                                                                                                                    
+FID on Test Set: 24.6622314453125                                                                                                                                             
+Avg Loss on Test (only 0) Set: 0.014522021514724712                                                                                                                           
+FID on Test (only 0) Set: 29.97698211669922                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.25 proportion...
+Selected 512 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014757260803605732                                                                                                                                    
+FID on Test Set: 24.519180297851562                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.014438185938016265                                                                                                                           
+FID on Test (only 0) Set: 27.013961791992188                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.26 proportion...
+Selected 532 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014968012112888118                                                                                                                                    
+FID on Test Set: 25.446456909179688                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01431089649499603                                                                                                                            
+FID on Test (only 0) Set: 28.6025390625                                                                                                                                       
+                                                                                                                                                                              
+Fine-tuning with random 0.27 proportion...
+Selected 552 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01471569351360813                                                                                                                                     
+FID on Test Set: 24.819259643554688                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.014221779720819725                                                                                                                           
+FID on Test (only 0) Set: 28.615936279296875                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.28 proportion...
+Selected 573 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014992996944158676                                                                                                                                    
+FID on Test Set: 24.201766967773438                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01411100529248313                                                                                                                            
+FID on Test (only 0) Set: 27.453109741210938                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.29 proportion...
+Selected 593 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01486321538732227                                                                                                                                     
+FID on Test Set: 23.6773681640625                                                                                                                                             
+Avg Loss on Test (only 0) Set: 0.014017028102594219                                                                                                                           
+FID on Test (only 0) Set: 26.839996337890625                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.3 proportion...
+Selected 614 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015255345256150576                                                                                                                                    
+FID on Test Set: 25.25921630859375                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.014040639070908027                                                                                                                           
+FID on Test (only 0) Set: 28.026451110839844                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.31 proportion...
+Selected 634 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015085180316987135                                                                                                                                    
+FID on Test Set: 26.11956787109375                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.013900279361821179                                                                                                                           
+FID on Test (only 0) Set: 27.745773315429688                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.32 proportion...
+Selected 655 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014853142095603289                                                                                                                                    
+FID on Test Set: 25.424575805664062                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.013779889641576731                                                                                                                           
+FID on Test (only 0) Set: 27.540740966796875                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.33 proportion...
+Selected 675 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015067095369261096                                                                                                                                    
+FID on Test Set: 25.401321411132812                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.013692908108291425                                                                                                                           
+FID on Test (only 0) Set: 27.22454833984375                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.34 proportion...
+Selected 696 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014890159042124651                                                                                                                                    
+FID on Test Set: 25.10992431640625                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.01363942741573199                                                                                                                            
+FID on Test (only 0) Set: 27.83111572265625                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.35000000000000003 proportion...
+Selected 716 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014545980555624283                                                                                                                                    
+FID on Test Set: 25.290023803710938                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.013573645596506492                                                                                                                           
+FID on Test (only 0) Set: 27.464157104492188                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.36 proportion...
+Selected 737 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014860677206456785                                                                                                                                    
+FID on Test Set: 26.142120361328125                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.013441758781757053                                                                                                                           
+FID on Test (only 0) Set: 26.833465576171875                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.37 proportion...
+Selected 757 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015185832729002868                                                                                                                                    
+FID on Test Set: 25.443817138671875                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01334595941814917                                                                                                                            
+FID on Test (only 0) Set: 26.480987548828125                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.38 proportion...
+Selected 778 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015089723536675592                                                                                                                                    
+FID on Test Set: 25.0701904296875                                                                                                                                             
+Avg Loss on Test (only 0) Set: 0.01331607378420553                                                                                                                            
+FID on Test (only 0) Set: 27.058189392089844                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.39 proportion...
+Selected 798 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01467524205349946                                                                                                                                     
+FID on Test Set: 25.289642333984375                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.0132981587857084                                                                                                                             
+FID on Test (only 0) Set: 25.93743896484375                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.4 proportion...
+Selected 819 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014742251820450747                                                                                                                                    
+FID on Test Set: 25.449050903320312                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.013126500385661363                                                                                                                           
+FID on Test (only 0) Set: 27.468849182128906                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.41000000000000003 proportion...
+Selected 839 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015007319847370582                                                                                                                                    
+FID on Test Set: 26.1016845703125                                                                                                                                             
+Avg Loss on Test (only 0) Set: 0.013106164922320036                                                                                                                           
+FID on Test (only 0) Set: 25.45379638671875                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.42 proportion...
+Selected 860 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014944943199026284                                                                                                                                    
+FID on Test Set: 25.104080200195312                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.013132560565326438                                                                                                                           
+FID on Test (only 0) Set: 26.994461059570312                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.43 proportion...
+Selected 880 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014714240037960735                                                                                                                                    
+FID on Test Set: 25.487274169921875                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.013025293268301354                                                                                                                           
+FID on Test (only 0) Set: 27.016448974609375                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.44 proportion...
+Selected 901 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014666339962445818                                                                                                                                    
+FID on Test Set: 25.015960693359375                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012966617814987442                                                                                                                           
+FID on Test (only 0) Set: 26.979629516601562                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.45 proportion...
+Selected 921 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.0152905577817819                                                                                                                                      
+FID on Test Set: 25.312713623046875                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012942787780597502                                                                                                                           
+FID on Test (only 0) Set: 26.300918579101562                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.46 proportion...
+Selected 942 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014914056061684278                                                                                                                                    
+FID on Test Set: 25.934402465820312                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012856749393407028                                                                                                                           
+FID on Test (only 0) Set: 27.097976684570312                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.47000000000000003 proportion...
+Selected 962 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014996914899057856                                                                                                                                    
+FID on Test Set: 25.38262939453125                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.012857897523600533                                                                                                                           
+FID on Test (only 0) Set: 26.49610137939453                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.48 proportion...
+Selected 983 random samples for fine-tuning                                                                                                                                   
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014831861440939065                                                                                                                                    
+FID on Test Set: 25.194183349609375                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012743628207755712                                                                                                                           
+FID on Test (only 0) Set: 25.8629150390625                                                                                                                                    
+                                                                                                                                                                              
+Fine-tuning with random 0.49 proportion...
+Selected 1003 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014610251718806921                                                                                                                                    
+FID on Test Set: 25.746902465820312                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012743991664230672                                                                                                                           
+FID on Test (only 0) Set: 26.680404663085938                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.5 proportion...
+Selected 1024 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014940024216400616                                                                                                                                    
+FID on Test Set: 24.522567749023438                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012687590534618239                                                                                                                           
+FID on Test (only 0) Set: 26.116043090820312                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.51 proportion...
+Selected 1044 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014999820355569682                                                                                                                                    
+FID on Test Set: 25.402297973632812                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012673648710514665                                                                                                                           
+FID on Test (only 0) Set: 27.01068115234375                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.52 proportion...
+Selected 1064 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015324535796764849                                                                                                                                    
+FID on Test Set: 26.578155517578125                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012588449798248785                                                                                                                           
+FID on Test (only 0) Set: 26.110076904296875                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.53 proportion...
+Selected 1085 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015126240934307589                                                                                                                                    
+FID on Test Set: 25.87646484375                                                                                                                                               
+Avg Loss on Test (only 0) Set: 0.012537349496340873                                                                                                                           
+FID on Test (only 0) Set: 26.818771362304688                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.54 proportion...
+Selected 1105 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015188342464284688                                                                                                                                    
+FID on Test Set: 25.810470581054688                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012520059011401418                                                                                                                           
+FID on Test (only 0) Set: 26.186767578125                                                                                                                                     
+                                                                                                                                                                              
+Fine-tuning with random 0.55 proportion...
+Selected 1126 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014824993127945163                                                                                                                                    
+FID on Test Set: 25.862030029296875                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01240554697388707                                                                                                                            
+FID on Test (only 0) Set: 25.842941284179688                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.56 proportion...
+Selected 1146 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014938107897194186                                                                                                                                    
+FID on Test Set: 25.95489501953125                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.012403448016088153                                                                                                                           
+FID on Test (only 0) Set: 26.68231201171875                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.5700000000000001 proportion...
+Selected 1167 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014610995587759135                                                                                                                                    
+FID on Test Set: 25.900146484375                                                                                                                                              
+Avg Loss on Test (only 0) Set: 0.012402477017983946                                                                                                                           
+FID on Test (only 0) Set: 26.908401489257812                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.58 proportion...
+Selected 1187 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014974135805175592                                                                                                                                    
+FID on Test Set: 25.541015625                                                                                                                                                 
+Avg Loss on Test (only 0) Set: 0.012346691865597528                                                                                                                           
+FID on Test (only 0) Set: 26.089736938476562                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.59 proportion...
+Selected 1208 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015122284573351408                                                                                                                                    
+FID on Test Set: 25.597381591796875                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012342985469980963                                                                                                                           
+FID on Test (only 0) Set: 26.591163635253906                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.6 proportion...
+Selected 1228 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014922698668613066                                                                                                                                    
+FID on Test Set: 25.79156494140625                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.012265338057566586                                                                                                                           
+FID on Test (only 0) Set: 26.171371459960938                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.61 proportion...
+Selected 1249 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015251086504122213                                                                                                                                    
+FID on Test Set: 26.828994750976562                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012203995365060259                                                                                                                           
+FID on Test (only 0) Set: 26.620162963867188                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.62 proportion...
+Selected 1269 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015351462736191479                                                                                                                                    
+FID on Test Set: 26.892410278320312                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012169150913096205                                                                                                                           
+FID on Test (only 0) Set: 26.735015869140625                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.63 proportion...
+Selected 1290 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015126065241304332                                                                                                                                    
+FID on Test Set: 26.230026245117188                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012159799921744483                                                                                                                           
+FID on Test (only 0) Set: 26.149368286132812                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.64 proportion...
+Selected 1310 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015156893878099709                                                                                                                                    
+FID on Test Set: 26.102462768554688                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012154389406335826                                                                                                                           
+FID on Test (only 0) Set: 26.196945190429688                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.65 proportion...
+Selected 1331 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015332038724352515                                                                                                                                    
+FID on Test Set: 25.869216918945312                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.012088207472638435                                                                                                                           
+FID on Test (only 0) Set: 26.738571166992188                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.66 proportion...
+Selected 1351 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015290908122949531                                                                                                                                    
+FID on Test Set: 26.596038818359375                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01205210664822739                                                                                                                            
+FID on Test (only 0) Set: 26.2239990234375                                                                                                                                    
+                                                                                                                                                                              
+Fine-tuning with random 0.67 proportion...
+Selected 1372 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01503756845420412                                                                                                                                     
+FID on Test Set: 25.782318115234375                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01202097714793089                                                                                                                            
+FID on Test (only 0) Set: 26.45830535888672                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.68 proportion...
+Selected 1392 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015117987873338734                                                                                                                                    
+FID on Test Set: 25.943435668945312                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011964748485241922                                                                                                                           
+FID on Test (only 0) Set: 26.423011779785156                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.6900000000000001 proportion...
+Selected 1413 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015216082462643499                                                                                                                                    
+FID on Test Set: 26.367401123046875                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01194659314921354                                                                                                                            
+FID on Test (only 0) Set: 26.36731719970703                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.7000000000000001 proportion...
+Selected 1433 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015388096826029596                                                                                                                                    
+FID on Test Set: 26.772506713867188                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011928962295095684                                                                                                                           
+FID on Test (only 0) Set: 26.058212280273438                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.71 proportion...
+Selected 1454 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014765402555838136                                                                                                                                    
+FID on Test Set: 25.984848022460938                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011948437873055513                                                                                                                           
+FID on Test (only 0) Set: 26.768043518066406                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.72 proportion...
+Selected 1474 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015264201603088168                                                                                                                                    
+FID on Test Set: 27.35284423828125                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.011887972434859114                                                                                                                           
+FID on Test (only 0) Set: 26.146713256835938                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.73 proportion...
+Selected 1495 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015080565780749566                                                                                                                                    
+FID on Test Set: 25.9188232421875                                                                                                                                             
+Avg Loss on Test (only 0) Set: 0.011835201046600633                                                                                                                           
+FID on Test (only 0) Set: 26.072120666503906                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.74 proportion...
+Selected 1515 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015270050385424838                                                                                                                                    
+FID on Test Set: 26.024566650390625                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011776051051411017                                                                                                                           
+FID on Test (only 0) Set: 26.844940185546875                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.75 proportion...
+Selected 1536 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01508936449289422                                                                                                                                     
+FID on Test Set: 26.087417602539062                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011788934932270904                                                                                                                           
+FID on Test (only 0) Set: 26.66973114013672                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.76 proportion...
+Selected 1556 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015405390900639304                                                                                                                                    
+FID on Test Set: 26.741119384765625                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011782737564276525                                                                                                                           
+FID on Test (only 0) Set: 26.76848602294922                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.77 proportion...
+Selected 1576 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015272411130695218                                                                                                                                    
+FID on Test Set: 26.852951049804688                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011750337917224638                                                                                                                           
+FID on Test (only 0) Set: 26.648635864257812                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.78 proportion...
+Selected 1597 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015251728841747081                                                                                                                                    
+FID on Test Set: 25.943588256835938                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011746697141836416                                                                                                                           
+FID on Test (only 0) Set: 26.429916381835938                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.79 proportion...
+Selected 1617 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014918519408183784                                                                                                                                    
+FID on Test Set: 26.246124267578125                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01173758265985252                                                                                                                            
+FID on Test (only 0) Set: 26.09699249267578                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.8 proportion...
+Selected 1638 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015425785718434781                                                                                                                                    
+FID on Test Set: 26.449996948242188                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011703553801516489                                                                                                                           
+FID on Test (only 0) Set: 26.626449584960938                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.81 proportion...
+Selected 1658 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015212955035110554                                                                                                                                    
+FID on Test Set: 25.559524536132812                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011656292525300642                                                                                                                           
+FID on Test (only 0) Set: 26.602706909179688                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.8200000000000001 proportion...
+Selected 1679 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.014908189143682193                                                                                                                                    
+FID on Test Set: 26.56671142578125                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.011610735627128837                                                                                                                           
+FID on Test (only 0) Set: 26.793350219726562                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.8300000000000001 proportion...
+Selected 1699 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015072550239892735                                                                                                                                    
+FID on Test Set: 26.362350463867188                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011642223813010341                                                                                                                           
+FID on Test (only 0) Set: 26.942962646484375                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.84 proportion...
+Selected 1720 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01532563948421739                                                                                                                                     
+FID on Test Set: 27.694122314453125                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011570842915015029                                                                                                                           
+FID on Test (only 0) Set: 26.54181671142578                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.85 proportion...
+Selected 1740 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.01523251673967252                                                                                                                                     
+FID on Test Set: 27.183486938476562                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011597525895744257                                                                                                                           
+FID on Test (only 0) Set: 26.9302978515625                                                                                                                                    
+                                                                                                                                                                              
+Fine-tuning with random 0.86 proportion...
+Selected 1761 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015064783750688093                                                                                                                                    
+FID on Test Set: 26.069015502929688                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011533696965637559                                                                                                                           
+FID on Test (only 0) Set: 26.49219512939453                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.87 proportion...
+Selected 1781 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015224873716420007                                                                                                                                    
+FID on Test Set: 26.694427490234375                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011537181523067838                                                                                                                           
+FID on Test (only 0) Set: 26.72864532470703                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.88 proportion...
+Selected 1802 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015222345734002829                                                                                                                                    
+FID on Test Set: 25.491729736328125                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011475443512638461                                                                                                                           
+FID on Test (only 0) Set: 26.15735626220703                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.89 proportion...
+Selected 1822 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015259316419076185                                                                                                                                    
+FID on Test Set: 26.023818969726562                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011467496587476712                                                                                                                           
+FID on Test (only 0) Set: 26.805770874023438                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.9 proportion...
+Selected 1843 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015243212098084769                                                                                                                                    
+FID on Test Set: 26.186676025390625                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01142428235307678                                                                                                                            
+FID on Test (only 0) Set: 26.581863403320312                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.91 proportion...
+Selected 1863 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015403913907732658                                                                                                                                    
+FID on Test Set: 27.0435791015625                                                                                                                                             
+Avg Loss on Test (only 0) Set: 0.01143003960320612                                                                                                                            
+FID on Test (only 0) Set: 27.396888732910156                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.92 proportion...
+Selected 1884 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015347585215636173                                                                                                                                    
+FID on Test Set: 27.322586059570312                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011414697707858773                                                                                                                           
+FID on Test (only 0) Set: 26.69780731201172                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.93 proportion...
+Selected 1904 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015412241789135805                                                                                                                                    
+FID on Test Set: 25.874252319335938                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011426431859596348                                                                                                                           
+FID on Test (only 0) Set: 26.873931884765625                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.9400000000000001 proportion...
+Selected 1925 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015369958369262804                                                                                                                                    
+FID on Test Set: 27.148330688476562                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011396592843099212                                                                                                                           
+FID on Test (only 0) Set: 26.648529052734375                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.9500000000000001 proportion...
+Selected 1945 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015331428617002985                                                                                                                                    
+FID on Test Set: 26.65167236328125                                                                                                                                            
+Avg Loss on Test (only 0) Set: 0.011382288744730153                                                                                                                           
+FID on Test (only 0) Set: 26.83282470703125                                                                                                                                   
+                                                                                                                                                                              
+Fine-tuning with random 0.96 proportion...
+Selected 1966 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015316195179195802                                                                                                                                    
+FID on Test Set: 26.429122924804688                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011329505891463131                                                                                                                           
+FID on Test (only 0) Set: 27.006202697753906                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.97 proportion...
+Selected 1986 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015227354266528437                                                                                                                                    
+FID on Test Set: 25.749923706054688                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.01132042126240665                                                                                                                            
+FID on Test (only 0) Set: 26.716346740722656                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.98 proportion...
+Selected 2007 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015325451396904555                                                                                                                                    
+FID on Test Set: 26.966049194335938                                                                                                                                           
+Avg Loss on Test (only 0) Set: 0.011257807145664963                                                                                                                           
+FID on Test (only 0) Set: 26.713470458984375                                                                                                                                  
+                                                                                                                                                                              
+Fine-tuning with random 0.99 proportion...
+Selected 2027 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:                                                                                                                                                     
+Avg Loss on Test Set: 0.015110053478167629                                                                                                                                    
+FID on Test Set: 27.0235595703125                                                                                                                                             
+Avg Loss on Test (only 0) Set: 0.011297534631413161                                                                                                                           
+FID on Test (only 0) Set: 27.029090881347656                                                                                                                                  
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 99/99 [1:30:44<00:00, 54.99s/it]
+
+Fine-tuning with 2027 randomly selected samples...
+Selected 2027 random samples for fine-tuning                                                                                                                                  
+                                                                                                                                                                              
+After Random Fine-Tuning:
+Avg Loss on Test Set: 0.015500124829713968
+FID on Test Set: 26.84014892578125
+Avg Loss on Test (only 0) Set: 0.011252008815181954
+FID on Test (only 0) Set: 26.925643920898438
+Finetuning on full dataset (2048 samples)...
+                                                                                                                                                                              
+After Fine-Tuning on Full Dataset:
+Avg Loss on Test Set: 0.015358615351772187
+FID on Test Set: 26.717529296875
+Avg Loss on Test (only 0) Set: 0.011266815568301447
+FID on Test (only 0) Set: 27.07624053955078
